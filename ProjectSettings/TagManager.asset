@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - breakable
+  - enemy
+  - plant
+  - rock
+  - log
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - PostProcessing
+  - Plot
+  - BigResource
+  - SmallResource
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Signs
+    uniqueID: 2987910469
+    locked: 0
+  - name: Plot
+    uniqueID: 410902735
+    locked: 0
+  - name: Resource
+    uniqueID: 2829248347
+    locked: 0
+  - name: Player
+    uniqueID: 2774899397
+    locked: 0

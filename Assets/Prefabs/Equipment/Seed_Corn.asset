@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf5d262cb6f184e4da07b5c96a2fe8a3, type: 3}
+  m_Name: Seed_Corn
+  m_EditorClassIdentifier: 
+  _icon: {fileID: 21300302, guid: da316ce9127c01f4c809e354eff9f042, type: 3}
+  _stackSize: 0
+  numberOfUses: 0
+  isTool: 0
+  equipmentType: 2
+  stage1: {fileID: 21300000, guid: f004243bdb57ddb4885756afc89b71e6, type: 3}
+  stage1watered: {fileID: 21300024, guid: f004243bdb57ddb4885756afc89b71e6, type: 3}
+  stage2: {fileID: 21300002, guid: f004243bdb57ddb4885756afc89b71e6, type: 3}
+  stage2watered: {fileID: 21300026, guid: f004243bdb57ddb4885756afc89b71e6, type: 3}
+  stage3: {fileID: 21300004, guid: f004243bdb57ddb4885756afc89b71e6, type: 3}
+  stage3watered: {fileID: 21300028, guid: f004243bdb57ddb4885756afc89b71e6, type: 3}
+  growthAge: 5
+  stage1Age: 3
+  stage2Age: 4
+  stage3Age: 5
+  repeatableGrowths: 1
+  daysToRegrow: 3
+  harvestableAmount: 3
+  plantSeason: 1
+  item: {fileID: 11400000, guid: d952478ff7867574da2de32eebd193d0, type: 2}
+  clipDown: {fileID: 0}
+  clipLeft: {fileID: 0}
+  clipRight: {fileID: 0}
+  clipUp: {fileID: 0}
