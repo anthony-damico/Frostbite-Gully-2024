@@ -43,6 +43,7 @@ public class PlayerMovement : MonoBehaviour
     public EquipmentManager equipmentManager;           //This creates a refernce to the equipmentManager script
     private PlayerStats playerStats;                    //This creates a areferce to the PlayerStats.cs script
 
+    //Player Animation Variables
     public AnimationClip clipDown;                      //The Animation for a tool/items down position
     public AnimationClip clipLeft;                      //The Animation for a tool/items Left position
     public AnimationClip clipRight;                     //The Animation for a tool/items Right position
@@ -51,11 +52,16 @@ public class PlayerMovement : MonoBehaviour
     private bool playerMovementDisabled;                //Is used to stop the player moving when an animation is playing (such as watering seeds)
     public float playerAnimSeconds;                     //This is the length a animation clip will play for. For now, all animations will play 0.350f
 
+    //Raycast and LayerMask Variables
     private int layermask1 = 1 << 9;                    //Plot Layer
     private int layermask2 = 1 << 10;                   //BigResource Layer
     private int layermask3 = 1 << 11;                   //SmallResource Layer
     private LayerMask requiredLayersMask;               //Not sure what this is yet?
 
+    //Controller Variables
+    public string btnHorizontal = "Horizontal";         //Input Managers input for left and right
+    public string btnVertical = "Vertical";             //Input Managers input for Up and Down
+    public string btnAction2 = "Action2";               //Input Managers input for using something. EG tool (X button on an Xbox Controller)            
 
 
     //Start Methods
@@ -89,10 +95,10 @@ public class PlayerMovement : MonoBehaviour
         change = Vector3.zero;  //By setting change (Vector3 Function) to zero, it means that the player is reset every frame
 
         //The below determines weather the user/player is pressing any keys (up, down, left, right)
-        change.x = Input.GetAxisRaw("Horizontal"); //Horizontal is defined by default in Unity 
-        change.y = Input.GetAxisRaw("Vertical"); //Vertical is defined by default in Unity 
+        change.x = Input.GetAxisRaw(btnHorizontal); //Horizontal is defined by default in Unity 
+        change.y = Input.GetAxisRaw(btnVertical); //Vertical is defined by default in Unity 
 
-        if (Input.GetButtonDown("Attack Input") && currentState != PlayerState.attack) //Check to see if the attack input is true (spacebar being pressed) and checks to make sure the player state is not already set to attack to prevent unintential double attack
+        if (Input.GetButtonDown(btnAction2) && currentState != PlayerState.attack) //Check to see if the attack input is true (spacebar being pressed) and checks to make sure the player state is not already set to attack to prevent unintential double attack
         {
             playerStats.ReducePlayersHealth(1); //Reduce the players health by 1 (I will work out a damage formula at a later date)
             playerRaycast(); //This might need to occur at the same time as the attackCoroutine meaning a second check might need to occur
