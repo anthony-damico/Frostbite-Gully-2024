@@ -7,10 +7,11 @@ using TMPro;
 public class DialogManager : MonoBehaviour
 {
 
-    public Dialog currentDialog;    //The Dialog Currently running
-    public GameObject dialogBox;
-    public TextMeshProUGUI dialogText;
-    public bool playerInRange;      //A check against the Box Collider 2D to check that the player is in range. Could be replace with Raycast at a later date
+    public Dialog currentDialog;        //The Dialog Currently running
+    public GameObject dialogBox;        //This is a link to the DialogUIManager/DialogUICanvas to turn the DialogUI on and Off as needed
+    public TextMeshProUGUI dialogText;  //This is the text that is that is displayed in the DialogUI. It will be updated during the ProgressDialog() method
+    [SerializeField] int index = 0;              //This is the current count/posisiton in the currentDialog array (the scriptable object attached to this)
+    public bool playerInRange;          //A check against the Box Collider 2D to check that the player is in range. Could be replace with Raycast at a later date
 
 
 
@@ -25,14 +26,14 @@ public class DialogManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space) == true && playerInRange == true)
         {
-            if (dialogBox.activeInHierarchy) //Checks to see if the dialogbox is active
+            Debug.Log("In Range");
+
+            if (dialogBox.activeInHierarchy == false) //if the dialogbox is not active
             {
-                dialogBox.SetActive(false);
-            }
-            else
-            {
+                Debug.Log("Spacebar inside update pressed");
                 dialogBox.SetActive(true);
-                //dialogText.text = dialog;
+                dialogText.text = currentDialog.lines[index].text;
+                ProgressDialog();
             }
         }
     }
@@ -40,7 +41,23 @@ public class DialogManager : MonoBehaviour
 
     void ProgressDialog()
     {
+        if(index < currentDialog.lines.Length - 1) //While the index (current count) is less then the total number of elements in the currentDialog.lines array. Do the stuff inside the if statement
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                Debug.Log("Spacebar inside ProgressDialog pressed");
+                index++; //increase the currentDialog.lines array by 1 to select the next sentence
+                dialogText.text = "";
+                dialogText.text = currentDialog.lines[index].text;
+            }
 
+        }
+        else
+        {
+            dialogBox.SetActive(false);
+            index = 0;
+        }
+        
     }
 
 
