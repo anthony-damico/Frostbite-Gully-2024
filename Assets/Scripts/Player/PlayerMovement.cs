@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Playables;
 using UnityEngine.Animations;
+using UnityEngine.InputSystem;
 
 
 
@@ -92,11 +93,11 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-        change = Vector3.zero;  //By setting change (Vector3 Function) to zero, it means that the player is reset every frame
+        //change = Vector3.zero;  //By setting change (Vector3 Function) to zero, it means that the player is reset every frame
 
         //The below determines weather the user/player is pressing any keys (up, down, left, right)
-        change.x = Input.GetAxisRaw(btnHorizontal); //Horizontal is defined by default in Unity 
-        change.y = Input.GetAxisRaw(btnVertical); //Vertical is defined by default in Unity 
+        //change.x = Input.GetAxisRaw(btnHorizontal); //Horizontal is defined by default in Unity 
+        //change.y = Input.GetAxisRaw(btnVertical); //Vertical is defined by default in Unity 
 
         if (Input.GetButtonDown(btnAction2) && currentState != PlayerState.attack) //Check to see if the attack input is true (spacebar being pressed) and checks to make sure the player state is not already set to attack to prevent unintential double attack
         {
@@ -108,6 +109,14 @@ public class PlayerMovement : MonoBehaviour
         {
             UpdateAnimationAndMove();
         }
+    }
+
+
+    private void OnMove(InputValue value)
+    {
+        var direction = value.Get<Vector2>();
+
+        change = new Vector3(direction.x, direction.y, 0);
     }
 
 
@@ -221,6 +230,13 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+
+    private void OnMove()
+    {
+        //Debug.Log("Moving?");
+        
+        
+    }
 
     //The below method has been defined to allow me to call the player movement from other places as needed (Such as using onscreen buttons)
     void MoveCharacter()

@@ -9,7 +9,7 @@ public class Line
 {
     public Character character;
 
-    [TextArea(4, 5)]
+    [TextArea(1, 4)]
     public string text;
 }
 
@@ -17,5 +17,6 @@ public class Line
 public class Dialog : ScriptableObject
 {
     public Line[] lines;
+    public Dialog nextDialog;
 }
 

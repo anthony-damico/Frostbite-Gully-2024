@@ -43,11 +43,11 @@ SpriteAtlas:
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: 93f50993de751de4982e10fcdad59358, type: 3}
-    totalSpriteSurfaceArea: 6020854
+    totalSpriteSurfaceArea: 6506479
     bindAsDefault: 1
     storedHash:
       serializedVersion: 2
-      Hash: d175b2d8044d7798c1a4f55285e45ac0
+      Hash: 8bce4052c502c309f1c9a59a1d3e5387
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
   - {fileID: 21300000, guid: d34fa810beba86e4dadde00d85714448, type: 3}
@@ -607,6 +607,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: d65eee0759f85274e900bb9ca73aa26e, type: 3}
   - {fileID: 21300000, guid: d3dca117cf815ac45bda19568269326a, type: 3}
   - {fileID: 21300000, guid: 136dac17d2b50c54494865bc3df58aa6, type: 3}
+  - {fileID: 21300000, guid: bfd87d17412937643bed155e97e99249, type: 3}
   - {fileID: 21300000, guid: 891901273d0b8cf4aae2eb45a6d7a99d, type: 3}
   - {fileID: 21300000, guid: 950e71370004842498f8cf9bc92c7338, type: 3}
   - {fileID: 21300000, guid: faf32637a7bb0af43a9015023baf8082, type: 3}
@@ -2046,6 +2047,7 @@ SpriteAtlas:
   - hud_equip_027
   - hud_equip_140
   - hud_equip_033
+  - Fewdor
   - hud_equip_189
   - hud_day_25
   - hud_equip_197
