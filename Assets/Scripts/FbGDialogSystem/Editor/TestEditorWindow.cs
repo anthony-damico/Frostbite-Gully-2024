@@ -23,7 +23,7 @@ public class TestEditorWindow : EditorWindow
     public static void OpenWindow()
     {
         TestEditorWindow window = GetWindow<TestEditorWindow>(false, "Dialog Editor", true);
-        window.titleContent = new GUIContent("Node Editor");
+        window.titleContent = new GUIContent("Dialog Editor");
 
     }
 
@@ -138,7 +138,7 @@ public class TestEditorWindow : EditorWindow
     {
         if (nodes != null)
         {
-            for (int i = nodes.Count - 1; i > 0; i--)
+            for (int i = nodes.Count - 1; i >= 0; i--)
             {
                 bool guiChanged = nodes[i].ProcessEvents(e);
 
@@ -221,7 +221,7 @@ public class TestEditorWindow : EditorWindow
 
         if(selectedOutPoint != null)
         {
-            if(selectedOutPoint.node != selectedInPoint.node)
+            if(selectedOutPoint.node != selectedInPoint.node) // Not the same node
             {
                 CreateConnection();
                 ClearConnectionSelection();
@@ -231,6 +231,7 @@ public class TestEditorWindow : EditorWindow
                 ClearConnectionSelection();
             }
         }
+
     }
 
     private void OnClickOutPoint(FbG_ConnectionPoint outPoint)
@@ -239,7 +240,7 @@ public class TestEditorWindow : EditorWindow
 
         if (selectedInPoint != null)
         {
-            if (selectedOutPoint.node != selectedInPoint.node)
+            if (selectedOutPoint.node != selectedInPoint.node) // Not the same node
             {
                 CreateConnection();
                 ClearConnectionSelection();
@@ -249,6 +250,7 @@ public class TestEditorWindow : EditorWindow
                 ClearConnectionSelection();
             }
         }
+
     }
 
     private void OnClickRemoveNode(FbG_Node node)

@@ -27,7 +27,7 @@ public class FbG_Connection
             2f
             );
 
-        if(Handles.Button((inPoint.rect.center + outPoint.rect.center)* 0.5f, Quaternion.identity, 4, 8, Handles.RectangleHandleCap))
+        if(Handles.Button((inPoint.rect.center + outPoint.rect.center) * 0.5f, Quaternion.identity, 4, 8, Handles.RectangleHandleCap))
         {
             if(OnClickRemoveConnection != null)
             {
