@@ -35,7 +35,7 @@ public class FbG_ConnectionPoint
                 break;
 
             case ConnectionPointType.Out:
-                rect.x = node.rect.x - rect.width - 8f;
+                rect.x = node.rect.x + node.rect.width - 8f;
                 break;
         }
 
