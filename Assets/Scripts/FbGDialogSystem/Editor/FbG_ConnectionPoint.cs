@@ -1,27 +1,34 @@
 ﻿using System;
 using UnityEngine;
+using System.Xml.Serialization;
 
 public enum ConnectionPointType { In, Out};
 
 public class FbG_ConnectionPoint
 {
-    public Rect rect;
+    public string id;
 
-    public ConnectionPointType type;
+    [XmlIgnore] public Rect rect;
 
-    public FbG_Node node;
+    [XmlIgnore] public ConnectionPointType type;
 
-    public GUIStyle style;
+    [XmlIgnore] public FbG_Node node;
 
-    public Action<FbG_ConnectionPoint> OnClickConnectionPoint;
+    [XmlIgnore] public GUIStyle style;
 
-    public FbG_ConnectionPoint(FbG_Node node, ConnectionPointType type, GUIStyle style, Action<FbG_ConnectionPoint> OnClickConnectionPoint)
+    [XmlIgnore] public Action<FbG_ConnectionPoint> OnClickConnectionPoint;
+
+    public FbG_ConnectionPoint() { }
+
+    public FbG_ConnectionPoint(FbG_Node node, ConnectionPointType type, GUIStyle style, Action<FbG_ConnectionPoint> OnClickConnectionPoint, string id = null)
     {
         this.node = node;
         this.type = type;
         this.style = style;
         this.OnClickConnectionPoint = OnClickConnectionPoint;
         rect = new Rect(0, 0, 10.0f, 20.0f);
+
+        this.id = id ?? Guid.NewGuid().ToString();
     }
 
     public void Draw()

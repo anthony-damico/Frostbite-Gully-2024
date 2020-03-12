@@ -1,12 +1,15 @@
 ﻿using System;
 using UnityEditor;
 using UnityEngine;
+using System.Xml.Serialization;
 
 public class FbG_Connection
 {
     public FbG_ConnectionPoint inPoint;
     public FbG_ConnectionPoint outPoint;
-    public Action<FbG_Connection> OnClickRemoveConnection;
+    [XmlIgnore] public Action<FbG_Connection> OnClickRemoveConnection;
+
+    public FbG_Connection() { }
 
     public FbG_Connection(FbG_ConnectionPoint inPoint, FbG_ConnectionPoint outPoint, Action<FbG_Connection> OnClickRemoveConnection)
     {

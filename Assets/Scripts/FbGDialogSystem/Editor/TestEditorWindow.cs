@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -18,6 +19,11 @@ public class TestEditorWindow : EditorWindow
 
     private Vector2 offset;
     private Vector2 drag;
+
+    private string eventName;
+
+    private float menuBarHeight = 20.0f;
+    private Rect menuBar;
 
     [MenuItem("FbG/Dialog Editor")]
     public static void OpenWindow()
@@ -46,12 +52,16 @@ public class TestEditorWindow : EditorWindow
         outPointStyle.normal.background = EditorGUIUtility.Load("builtin skins/darkskin/images/btn right.png") as Texture2D;
         outPointStyle.active.background = EditorGUIUtility.Load("builtin skins/darkskin/images/btn right on.png") as Texture2D;
         outPointStyle.border = new RectOffset(4, 4, 12, 12);
+
+        eventName = "";
     }
 
     private void OnGUI()
     {
+
         DrawGrid(20, 0.2f, Color.gray);
         DrawGrid(100, 0.4f, Color.gray);
+        DrawMenuBar();
 
         DrawNodes();
         DrawConnections();
@@ -62,6 +72,38 @@ public class TestEditorWindow : EditorWindow
         ProcessEvents(Event.current);
 
         if (GUI.changed) Repaint();
+    }
+
+    private void DrawMenuBar()
+    {
+        menuBar = new Rect(0, 0, position.width, menuBarHeight);
+
+        GUILayout.BeginArea(menuBar, EditorStyles.toolbar);
+        GUILayout.BeginHorizontal();
+
+        GUILayout.Label(new GUIContent("Event Name"), GUILayout.Width(100));
+        eventName = EditorGUILayout.TextField("", eventName, GUILayout.Width(150)).ToString();
+        
+        
+        // Need to serialize the entire Editor Window with unique name
+        // 
+
+        GUILayout.Space(5);
+
+        if (GUILayout.Button(new GUIContent("Save"), EditorStyles.toolbarButton, GUILayout.Width(35)))
+        {
+            Save();
+        }
+
+        GUILayout.Space(5);
+
+        if(GUILayout.Button(new GUIContent("Load"), EditorStyles.toolbarButton, GUILayout.Width(35)))
+        {
+            Load();
+        }
+
+        GUILayout.EndHorizontal();
+        GUILayout.EndArea();
     }
 
     private void DrawGrid(float gridSpacing, float gridOpacity, Color gridColor)
@@ -212,7 +254,7 @@ public class TestEditorWindow : EditorWindow
             nodes = new List<FbG_Node>();
         }
 
-        nodes.Add(new FbG_Node(mousePosition, 200, 50, nodeStyle, selectedNodeStyle, inPointStyle, outPointStyle, OnClickInPoint, OnClickOutPoint, OnClickRemoveNode));
+        nodes.Add(new FbG_Node(mousePosition, 200, 200, nodeStyle, selectedNodeStyle, inPointStyle, outPointStyle, OnClickInPoint, OnClickOutPoint, OnClickRemoveNode));
     }
 
     private void OnClickInPoint(FbG_ConnectionPoint inPoint)
@@ -297,5 +339,56 @@ public class TestEditorWindow : EditorWindow
     {
         selectedInPoint = null;
         selectedOutPoint = null;
+    }
+
+    private void Save()
+    {
+        Debug.Log("Assets/Resources/" + eventName + ".xml");
+
+        if(nodes != null)
+        {
+            XMLOp.Serialize(nodes, "Assets/Resources/" + eventName + "_nodes.xml");
+        }
+
+        if (connections != null)
+        {
+            XMLOp.Serialize(connections, "Assets/Resources/" + eventName + "_connections.xml");
+        }
+
+    }
+
+    private void Load()
+    {
+        var nodesDeserialized = XMLOp.Deserialize<List<FbG_Node>>("Assets/Resources/" + eventName + "_nodes.xml");
+        var connectionsDeserialized = XMLOp.Deserialize<List<FbG_Connection>>("Assets/Resources/" + eventName + "_connections.xml");
+
+        nodes = new List<FbG_Node>();
+        connections = new List<FbG_Connection>();
+
+        foreach (var nodeDeserialized in nodesDeserialized)
+        {
+            nodes.Add(new FbG_Node(
+                nodeDeserialized.rect.position,
+                nodeDeserialized.rect.width,
+                nodeDeserialized.rect.height,
+                nodeStyle,
+                selectedNodeStyle,
+                inPointStyle,
+                outPointStyle,
+                OnClickInPoint,
+                OnClickOutPoint,
+                OnClickRemoveNode,
+                nodeDeserialized.inPoint.id,
+                nodeDeserialized.outPoint.id
+                )
+            );
+        }
+
+        foreach (var connectionDeserialized in connectionsDeserialized)
+        {
+            var inPoint = nodes.First(n => n.inPoint.id == connectionDeserialized.inPoint.id).inPoint;
+            var outPoint = nodes.First(n => n.outPoint.id == connectionDeserialized.outPoint.id).outPoint;
+            connections.Add(new FbG_Connection(inPoint, outPoint, OnClickRemoveConnection));
+        }
     }
 }

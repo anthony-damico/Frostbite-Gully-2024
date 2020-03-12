@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<ArrayOfFbG_Node xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <FbG_Node>
+    <rect>
+      <x>281</x>
+      <y>249</y>
+      <position>
+        <x>281</x>
+        <y>249</y>
+      </position>
+      <center>
+        <x>381</x>
+        <y>349</y>
+      </center>
+      <min>
+        <x>281</x>
+        <y>249</y>
+      </min>
+      <max>
+        <x>481</x>
+        <y>449</y>
+      </max>
+      <width>200</width>
+      <height>200</height>
+      <size>
+        <x>200</x>
+        <y>200</y>
+      </size>
+      <xMin>281</xMin>
+      <yMin>249</yMin>
+      <xMax>481</xMax>
+      <yMax>449</yMax>
+    </rect>
+    <inPoint>
+      <id>c38480cf-dfad-49fc-af9d-5d6f2b72164b</id>
+    </inPoint>
+    <outPoint>
+      <id>1dc71717-4acf-4280-8aec-2e89ce7dd95b</id>
+    </outPoint>
+    <lines>
+      <string>this is node 1</string>
+      <string xsi:nil="true" />
+      <string xsi:nil="true" />
+      <string xsi:nil="true" />
+      <string xsi:nil="true" />
+    </lines>
+  </FbG_Node>
+</ArrayOfFbG_Node>
