@@ -254,7 +254,7 @@ public class TestEditorWindow : EditorWindow
             nodes = new List<FbG_Node>();
         }
 
-        nodes.Add(new FbG_Node(mousePosition, 200, 200, nodeStyle, selectedNodeStyle, inPointStyle, outPointStyle, OnClickInPoint, OnClickOutPoint, OnClickRemoveNode));
+        nodes.Add(new FbG_Node(mousePosition, 250, 300, nodeStyle, selectedNodeStyle, inPointStyle, outPointStyle, OnClickInPoint, OnClickOutPoint, OnClickRemoveNode));
     }
 
     private void OnClickInPoint(FbG_ConnectionPoint inPoint)
@@ -367,6 +367,22 @@ public class TestEditorWindow : EditorWindow
 
         foreach (var nodeDeserialized in nodesDeserialized)
         {
+            //nodes.Add(new FbG_Node(
+            //    nodeDeserialized.rect.position,
+            //    nodeDeserialized.rect.width,
+            //    nodeDeserialized.rect.height,
+            //    nodeStyle,
+            //    selectedNodeStyle,
+            //    inPointStyle,
+            //    outPointStyle,
+            //    OnClickInPoint,
+            //    OnClickOutPoint,
+            //    OnClickRemoveNode,
+            //    nodeDeserialized.inPoint.id,
+            //    nodeDeserialized.outPoint.id
+            //    )
+            //);
+
             nodes.Add(new FbG_Node(
                 nodeDeserialized.rect.position,
                 nodeDeserialized.rect.width,
@@ -379,7 +395,8 @@ public class TestEditorWindow : EditorWindow
                 OnClickOutPoint,
                 OnClickRemoveNode,
                 nodeDeserialized.inPoint.id,
-                nodeDeserialized.outPoint.id
+                nodeDeserialized.outPoint.id,
+                nodeDeserialized.lines
                 )
             );
         }

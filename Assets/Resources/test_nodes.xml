@@ -2,47 +2,92 @@
 <ArrayOfFbG_Node xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <FbG_Node>
     <rect>
-      <x>281</x>
-      <y>249</y>
+      <x>85</x>
+      <y>82</y>
       <position>
-        <x>281</x>
-        <y>249</y>
+        <x>85</x>
+        <y>82</y>
       </position>
       <center>
-        <x>381</x>
-        <y>349</y>
+        <x>210</x>
+        <y>232</y>
       </center>
       <min>
-        <x>281</x>
-        <y>249</y>
+        <x>85</x>
+        <y>82</y>
       </min>
       <max>
-        <x>481</x>
-        <y>449</y>
+        <x>335</x>
+        <y>382</y>
       </max>
-      <width>200</width>
-      <height>200</height>
+      <width>250</width>
+      <height>300</height>
       <size>
-        <x>200</x>
-        <y>200</y>
+        <x>250</x>
+        <y>300</y>
       </size>
-      <xMin>281</xMin>
-      <yMin>249</yMin>
-      <xMax>481</xMax>
-      <yMax>449</yMax>
+      <xMin>85</xMin>
+      <yMin>82</yMin>
+      <xMax>335</xMax>
+      <yMax>382</yMax>
     </rect>
     <inPoint>
-      <id>c38480cf-dfad-49fc-af9d-5d6f2b72164b</id>
+      <id>4e50f149-332a-4007-924d-702c0c635545</id>
     </inPoint>
     <outPoint>
-      <id>1dc71717-4acf-4280-8aec-2e89ce7dd95b</id>
+      <id>b7039346-f3f7-45cc-9bd9-09615194a523</id>
     </outPoint>
     <lines>
-      <string>this is node 1</string>
-      <string xsi:nil="true" />
-      <string xsi:nil="true" />
-      <string xsi:nil="true" />
-      <string xsi:nil="true" />
+      <string>hello</string>
+      <string>there</string>
+      <string />
+      <string />
+      <string />
+    </lines>
+  </FbG_Node>
+  <FbG_Node>
+    <rect>
+      <x>442</x>
+      <y>151</y>
+      <position>
+        <x>442</x>
+        <y>151</y>
+      </position>
+      <center>
+        <x>567</x>
+        <y>301</y>
+      </center>
+      <min>
+        <x>442</x>
+        <y>151</y>
+      </min>
+      <max>
+        <x>692</x>
+        <y>451</y>
+      </max>
+      <width>250</width>
+      <height>300</height>
+      <size>
+        <x>250</x>
+        <y>300</y>
+      </size>
+      <xMin>442</xMin>
+      <yMin>151</yMin>
+      <xMax>692</xMax>
+      <yMax>451</yMax>
+    </rect>
+    <inPoint>
+      <id>5645bcb1-2c8b-4c7d-b9cd-b37c47de1218</id>
+    </inPoint>
+    <outPoint>
+      <id>9845f65c-a523-494d-a44e-7d459f286bf3</id>
+    </outPoint>
+    <lines>
+      <string>general</string>
+      <string>kenobi</string>
+      <string />
+      <string />
+      <string />
     </lines>
   </FbG_Node>
 </ArrayOfFbG_Node>
