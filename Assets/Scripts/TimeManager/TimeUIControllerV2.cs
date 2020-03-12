@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Experimental.Rendering.LWRP;
 
 public class TimeUIControllerV2 : MonoBehaviour
 {
@@ -113,7 +114,8 @@ public class TimeUIControllerV2 : MonoBehaviour
     public Sprite hp100; // This is a sprite for the healthbar located under the TimeManager (100% Health)
 
     public float healthAsPercentage;                      //Players Health as a percentage
-
+    public Light2D globalLight;                        //Global 2d light as part of lightweight renderer 2D 
+    public float globalLightIntensity;
 
 
 
@@ -123,7 +125,7 @@ public class TimeUIControllerV2 : MonoBehaviour
     {
         timeManagerController = TimeManagerController.instance;                                                         //Completes the reference back to the TimeManagerController.cs script
         playerStats = GameObject.FindObjectOfType(typeof(PlayerStats)) as PlayerStats;                                  //This complete the reference to the PlayerStats.cs Script
-}
+    }
 
     // Update is called once per frame
     void Update()
@@ -133,6 +135,10 @@ public class TimeUIControllerV2 : MonoBehaviour
         UpdateImageDayName();
         UpdateImageDayNumber();
         UpdateImageHealthBar();
+
+        //lightComp.color = Color.blue;
+        globalLight.intensity = globalLightIntensity;
+
     }
 
     void UpdateImageHealthBar()
