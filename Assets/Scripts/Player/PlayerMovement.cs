@@ -120,6 +120,28 @@ public class PlayerMovement : MonoBehaviour
     }
 
 
+    void OnAttack(InputAction.CallbackContext context)
+    {
+        switch (context.phase)
+        {
+            case InputActionPhase.Started:
+                /* the space key was pressed */ 
+                Debug.Log("the space key was pressed");
+                break;
+    
+            case InputActionPhase.Performed:
+                /* the space key was held for 3 seconds */
+                Debug.Log("the space key was held for 3 seconds");
+                break;
+    
+            case InputActionPhase.Canceled:
+                /* the space key was released; if there was no 'Performed', it was released before 3 seconds were up */
+                Debug.Log("the space key was released; if there was no 'Performed', it was released before 3 seconds were up");
+                break;
+        }
+    }
+
+
     void playerRaycast()
     {
         // See: https://docs.unity3d.com/ScriptReference/Physics2D.Raycast.html & https://answers.unity.com/questions/1499447/how-to-distinguish-which-layer-has-been-hit-by-ray.html
@@ -293,6 +315,17 @@ public class PlayerMovement : MonoBehaviour
             Debug.Log("Animation has been stopped");
 
             playerMovementDisabled = false; //Allows the player to move again now that the animation has finished
+        }
+    }
+
+    /// <summary>
+    /// Return the players current direction to currentPlayerDirection as a getter so that other scripts can't accidently override the parameter
+    /// </summary>
+    public PlayerDirection currentPlayerDirection
+    {
+        get
+        {
+            return playerDirection;
         }
     }
 
