@@ -43,11 +43,11 @@ SpriteAtlas:
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: 93f50993de751de4982e10fcdad59358, type: 3}
-    totalSpriteSurfaceArea: 6506479
+    totalSpriteSurfaceArea: 6507503
     bindAsDefault: 1
     storedHash:
       serializedVersion: 2
-      Hash: ce974211410bfd9f4fdcc4dec1cdc418
+      Hash: 0a0563604ecb7be6c5c56137b0ce3861
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
   - {fileID: 21300000, guid: d34fa810beba86e4dadde00d85714448, type: 3}
@@ -660,6 +660,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 25709319206e21849ab7e18acd0de6d6, type: 3}
   - {fileID: 21300000, guid: 87824629b7c64554ca7aaf31b9b52250, type: 3}
   - {fileID: 21300000, guid: 747dfd29053c4f142b1431ed565d4722, type: 3}
+  - {fileID: 21300000, guid: 585adf2978bd85a4f98798c024b950b5, type: 3}
   - {fileID: 21300000, guid: d8ab27391114a3f46a2ee936a2bf986c, type: 3}
   - {fileID: 21300000, guid: d75c7659ca7359d44b21b46fb7a4f168, type: 3}
   - {fileID: 21300000, guid: 475548694f037b64c882feda089ad3a1, type: 3}
@@ -2100,6 +2101,7 @@ SpriteAtlas:
   - hud_day_15
   - hud_equip_136
   - hud_equip_165
+  - directionCursor
   - hud_equip_023
   - hud_equip_107
   - hud_equip_139

@@ -149,10 +149,10 @@ public class CropManagerController : MonoBehaviour
     }
 
     //This will do the farm work
-    public void DoFarmWork(RaycastHit2D hit) //The raycast is passed in from the PlayerMovement.cs script
+    public void DoFarmWork(bool hit) //The raycast is passed in from the PlayerMovement.cs script
     {
         //Import Debug Step
-        Debug.Log("♫ Working on the Farm on all day, everybody sing the farming song ♫" + " " + hit.collider.name); //Do Planting Stuff
+        Debug.Log("♫ Working on the Farm on all day, everybody sing the farming song ♫" + " " + this.name); //Do Planting Stuff
 
         //Step 1: Clear Rubbish
         //Step 2: till tile (hoe tile)
@@ -172,13 +172,13 @@ public class CropManagerController : MonoBehaviour
         //Step 3: Plant Seed
         if(equipmentManager.currentEquipment.equipmentType == ToolType.seed && isTilled == true && isPlanted == false) //Check if the land has been hoed and if a seed is Equip
         {
-            PlantSeed(hit);
+            //PlantSeed(hit);
         }
 
         //Step 4: Water tile and/or seed
         if (equipmentManager.currentEquipment.equipmentType == ToolType.wateringCan)
         {
-            AddWateredState(hit);
+            //AddWateredState(hit);
         }
 
         //Step 6: Harvest crop
@@ -189,11 +189,11 @@ public class CropManagerController : MonoBehaviour
     }
 
     //This will change the graphic to "tilledTile"
-    void HoeTite(RaycastHit2D hit) //Each Planting Function (Hoe, Seed, Water etc will need to take a RaycastHit2D so that the raycast projected from the player knows what it has hit and what it is doing
+    void HoeTite(bool hit) //Each Planting Function (Hoe, Seed, Water etc will need to take a RaycastHit2D so that the raycast projected from the player knows what it has hit and what it is doing
     {
             //Till Land and tell the plot it is ready to accept a seed
-            Debug.Log("Land has been tilled on " + hit.collider.name);
-            hit.transform.GetComponent<SpriteRenderer>().sprite = tilledTile; //Change the tile graphic to the tilled sprite
+            Debug.Log("Land has been tilled on " + this.name);
+            this.transform.GetComponent<SpriteRenderer>().sprite = tilledTile; //Change the tile graphic to the tilled sprite
             isTilled = true; //The ground has been tiled and will now accept a seed
     }
 
@@ -395,7 +395,7 @@ public class CropManagerController : MonoBehaviour
     {
         if (canGrow == true) //This means 6am
         {
-            waitForTime(3.0f); //This will call the untitlity function and will wait 3 Seconds
+            StartCoroutine(waitForTime(3.0f)); //This will call the untitlity function and will wait 3 Seconds
 
             //currentGrowth will only occur if the plot has a seed on it
             if (isPlanted == true)
@@ -508,6 +508,31 @@ public class CropManagerController : MonoBehaviour
     public IEnumerator waitForTime(float seconds)
     {
         yield return new WaitForSeconds(seconds);
+    }
+
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+
+        if (collision.CompareTag("ToolHighlight"))
+        {
+            //collision.IsTouchingLayers(layerMask: 1 << 10)
+            if (collision.IsTouchingLayers(layerMask: 1 << LayerMask.NameToLayer("BigResource"))) //BigResource Layer
+            {
+                Debug.Log("Hit " + this.name + " which is a Big Resource");
+            }
+
+            else if (collision.IsTouchingLayers(layerMask: 1 << LayerMask.NameToLayer("SmallResource"))) //SmallResource Layer
+            {
+                Debug.Log("Hit " + this.name + " which is Small Resource");
+            }
+
+            else if (collision.IsTouchingLayers(layerMask: 1 << LayerMask.NameToLayer("Plot"))) //Plot Layer
+            {
+                Debug.Log("Hit " + this.name + " which is a plot");
+                DoFarmWork(true);
+            }
+        }
     }
 
 }

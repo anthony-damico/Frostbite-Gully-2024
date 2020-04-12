@@ -1,0 +1,60 @@
+{
+    "name": "CharacterInput",
+    "maps": [
+        {
+            "name": "Player",
+            "id": "e5fcb301-e95f-451c-b3cf-ca041fdfe620",
+            "actions": [
+                {
+                    "name": "Attack",
+                    "type": "Button",
+                    "id": "9193e6b4-981e-46e6-a282-4253c1e50fdb",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Hold(duration=3)"
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "4ef1f132-2fe6-4b40-878d-d60f8adea222",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Attack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "NPC",
+            "id": "c1e8777e-3c89-421a-bafb-5432cb85f8ae",
+            "actions": [
+                {
+                    "name": "New action",
+                    "type": "Button",
+                    "id": "d3da46b5-2c10-4752-b923-b2ccf04df5df",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "6c05ddf4-e773-4374-845f-27a8d78ff518",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

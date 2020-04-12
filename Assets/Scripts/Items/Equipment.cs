@@ -10,7 +10,7 @@ public class Equipment : Item, IUseable
     public int numberOfUses; //How many times the item can be used before it expires
     public bool isTool; //Defines whether the item is a tool so it can't expire / run out of uses
     public ToolType equipmentType; //What kind of Equipment is this
-
+    public ToolLevel toolLevel; //Defines what level the tool is. This is important for upgraded attacks.
 
     /////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////
@@ -59,4 +59,12 @@ public enum ToolType
     axe
 }
 
+public enum ToolLevel
+{
+    level1,
+    level2,
+    level3,
+    level4,
+    level5
+}
 

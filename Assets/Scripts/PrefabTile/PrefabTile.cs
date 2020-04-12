@@ -26,13 +26,13 @@ public class PrefabTile : UnityEngine.Tilemaps.TileBase
         // Streangly the position of gameobject starts at Left Bottom point of cell and not at it center
         // TODO need to add anchor points  (vertical and horisontal (left,centre,right)(top,centre,bottom))
 
-        //go.transform.position += Vector3.up;
+        go.transform.position += Vector3.up * 0.5f;
         //go.transform.position += Vector3.up + Vector3.right;
         //go.transform.position += Vector3.up * 0.5f + Vector3.right * 0.5f;
-        go.transform.position += Vector3.right * 0.5f + Vector3.up * 1.0f;
+        //go.transform.position += Vector3.right * 0.5f + Vector3.up * 1.0f;
         return true;
     }
-
+     
     public override bool GetTileAnimationData(Vector3Int location, ITilemap tileMap, ref TileAnimationData tileAnimationData)
     {
         // Make sprite of tile invisiable

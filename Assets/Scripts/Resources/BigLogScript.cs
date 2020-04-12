@@ -43,12 +43,12 @@ public class BigLogScript : MonoBehaviour
         }
     }
 
-    public void DamageObject(RaycastHit2D hit)
+    public void DamageObject()
     {
         if (equipmentManager.currentEquipment.equipmentType == ToolType.axe)
         {
             _healthCurrent = _healthCurrent - 1; //Reduce the rocks health by 1
-            Debug.Log("Log: BigLogScript.cs. " + hit.collider.name + " took 1 damage");
+            Debug.Log("Log: BigLogScript.cs. " + this.name + " took 1 damage");
         }
         else
         {
@@ -76,4 +76,34 @@ public class BigLogScript : MonoBehaviour
         _plotObject4.GetComponent<CropManagerController>().isEmpty = true; //Makes the underlying plot empty again. So new resources or plots can be generate. 
     }
 
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+
+        if (collision.CompareTag("ToolHighlight"))
+        {
+            if (collision.IsTouchingLayers(layerMask: 1 << LayerMask.NameToLayer("BigResource"))) //BigResource Layer
+            {
+                Debug.Log("Hit " + this.name + " which is a Big Resource");
+                if (tag == "rock")
+                {
+                    DamageObject();
+                }
+                else if (tag == "log")
+                {
+                    DamageObject();
+                }
+            }
+
+            else if (collision.IsTouchingLayers(layerMask: 1 << LayerMask.NameToLayer("SmallResource"))) //SmallResource Layer
+            {
+                Debug.Log("Hit " + this.name + " which is Small Resource");
+            }
+
+            else if (collision.IsTouchingLayers(layerMask: 1 << LayerMask.NameToLayer("Plot"))) //Plot Layer
+            {
+                Debug.Log("Hit " + this.name + " which is a plot");
+            }
+        }
+    }
 }

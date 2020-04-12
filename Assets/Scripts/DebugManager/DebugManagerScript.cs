@@ -108,6 +108,15 @@ public class DebugManagerScript : MonoBehaviour
 
         tool = (Equipment)Instantiate(inventoryScript._items[7]); //This initizes the Item in slot 7 in the item array
         inventoryScript.AddItem(tool);
+
+        tool = (Equipment)Instantiate(inventoryScript._items[8]); //This initizes the Item in slot 8 in the item array
+        inventoryScript.AddItem(tool);
+
+        tool = (Equipment)Instantiate(inventoryScript._items[9]); //This initizes the Item in slot 9 in the item array
+        inventoryScript.AddItem(tool);
+
+        tool = (Equipment)Instantiate(inventoryScript._items[10]); //This initizes the Item in slot 10 in the item array
+        inventoryScript.AddItem(tool);
     }
 
     //Add Corn Item to Inventory

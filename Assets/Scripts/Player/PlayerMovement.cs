@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.Playables;
 using UnityEngine.Animations;
 using UnityEngine.InputSystem;
+using System;
 
 
 
@@ -59,11 +60,21 @@ public class PlayerMovement : MonoBehaviour
     private int layermask3 = 1 << 11;                   //SmallResource Layer
     private LayerMask requiredLayersMask;               //Not sure what this is yet?
 
-    //Controller Variables
-    public string btnHorizontal = "Horizontal";         //Input Managers input for left and right
-    public string btnVertical = "Vertical";             //Input Managers input for Up and Down
-    public string btnAction2 = "Action2";               //Input Managers input for using something. EG tool (X button on an Xbox Controller)            
+    public GameObject toolHighlight;
+    public GameObject toolHitboxPrefab;
+    private Vector3 toolHighlightOffset;
+    private Vector3 hitboxOffset;
 
+    //Attach Charging Variables
+    private float startTime = 0f;
+    private bool level1Achieved = false;
+    private bool level2Achieved = false;
+    private bool level3Achieved = false;
+    private bool level4Achieved = false;
+    private bool level5Achieved = false;
+
+    //Input System
+    FbGInputSystem inputSystem;
 
     //Start Methods
 
@@ -80,12 +91,12 @@ public class PlayerMovement : MonoBehaviour
         equipmentManager = GameObject.FindObjectOfType(typeof(EquipmentManager)) as EquipmentManager;                   //This complete the reference to the EquipmentManager Script
         playerStats = GameObject.FindObjectOfType(typeof(PlayerStats)) as PlayerStats;                                  //This complete the reference to the PlayerStats.cs Script
         playerDirection = PlayerDirection.Down;                                                                         //Sets the player Direction to down when the game start
+        inputSystem = GetComponent<FbGInputSystem>();                                                                   //Complete a reference to the Arugula Input System Wrapper: http://angryarugula.com/unity/Arugula_InputSystem.unitypackage
     }
 
     // Update is called once per frame
     void Update()
     {
-
         checkPlayerDirection(); //Check the player direction and set the player direction to left, right, update, down according
 
         if (EventSystem.current.IsPointerOverGameObject()) //This is a built in unity function that checks if the mouse pointer is over a gameObject. If it is True, no other script will run
@@ -93,21 +104,95 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-        //change = Vector3.zero;  //By setting change (Vector3 Function) to zero, it means that the player is reset every frame
-
-        //The below determines weather the user/player is pressing any keys (up, down, left, right)
-        //change.x = Input.GetAxisRaw(btnHorizontal); //Horizontal is defined by default in Unity 
-        //change.y = Input.GetAxisRaw(btnVertical); //Vertical is defined by default in Unity 
-
-        if (Input.GetButtonDown(btnAction2) && currentState != PlayerState.attack) //Check to see if the attack input is true (spacebar being pressed) and checks to make sure the player state is not already set to attack to prevent unintential double attack
-        {
-            playerStats.ReducePlayersHealth(1); //Reduce the players health by 1 (I will work out a damage formula at a later date)
-            playerRaycast(); //This might need to occur at the same time as the attackCoroutine meaning a second check might need to occur
-            StartCoroutine(attackCoroutine());
-        }
-        else if (currentState == PlayerState.walk || currentState == PlayerState.idle) //The player sprite will begin to walk if currentState is equal to walk
+        if (currentState == PlayerState.walk || currentState == PlayerState.idle) //The player sprite will begin to walk if currentState is equal to walk
         {
             UpdateAnimationAndMove();
+        }
+
+        //Part of the Arugula Input System. It checks to see if the Attack Button has been pressed. Refer to the FbGInputSystem file
+        if (inputSystem.Attack.WasPressed)
+        {
+            if (currentState != PlayerState.attack) //Check to see if the attack input is true (spacebar being pressed) and checks to make sure the player state is not already set to attack to prevent unintential double attack
+            {
+                startTime = Time.time;
+                playerMovementDisabled = true; //Prevents the player from moving the Attack Button has been pressed
+            }
+        }
+
+        if (inputSystem.Attack.Pressed && Time.time - startTime > 5f && level4Achieved == true && level5Achieved == false && (equipmentManager.currentEquipment.equipmentType == ToolType.hoe || equipmentManager.currentEquipment.equipmentType == ToolType.wateringCan) && equipmentManager.currentEquipment.toolLevel >= ToolLevel.level5)
+        {
+            level5Achieved = true;
+            Debug.Log((Time.time - startTime).ToString("00:00.00") + " Level5");
+        }
+
+        if (inputSystem.Attack.Pressed && Time.time - startTime > 4f && level3Achieved == true && level4Achieved == false && (equipmentManager.currentEquipment.equipmentType == ToolType.hoe || equipmentManager.currentEquipment.equipmentType == ToolType.wateringCan) && equipmentManager.currentEquipment.toolLevel >= ToolLevel.level4)
+        {
+            level4Achieved = true;
+            Debug.Log((Time.time - startTime).ToString("00:00.00") + " Level4");
+        }
+
+        if (inputSystem.Attack.Pressed && Time.time - startTime > 3f && level2Achieved == true && level3Achieved == false && (equipmentManager.currentEquipment.equipmentType == ToolType.hoe || equipmentManager.currentEquipment.equipmentType == ToolType.wateringCan) && equipmentManager.currentEquipment.toolLevel >= ToolLevel.level3)
+        {
+            level3Achieved = true;
+            Debug.Log((Time.time - startTime).ToString("00:00.00") + " Level3");
+        }
+
+        if (inputSystem.Attack.Pressed && Time.time - startTime > 2f && level1Achieved == true && level2Achieved == false && (equipmentManager.currentEquipment.equipmentType == ToolType.hoe || equipmentManager.currentEquipment.equipmentType == ToolType.wateringCan) && equipmentManager.currentEquipment.toolLevel >= ToolLevel.level2)
+        {
+            level2Achieved = true;
+            Debug.Log((Time.time - startTime).ToString("00:00.00") + " Level2");
+        }
+
+        if (inputSystem.Attack.Pressed && level1Achieved == false)
+        {
+            level1Achieved = true;
+            Debug.Log((Time.time - startTime).ToString("00:00.00") + " Level1");
+        }
+
+        if (inputSystem.Attack.WasReleased)
+        {
+            if (level5Achieved == true)
+            {
+                playerStats.ReducePlayersHealth(1); //Reduce the players health by 1 (I will work out a damage formula at a later date)
+                GenerateToolHitboxLevel5();
+                StartCoroutine(attackCoroutine());
+                Debug.Log("Level5 Attack Achieved");
+            }
+            else if (level4Achieved == true)
+            {
+                playerStats.ReducePlayersHealth(1); //Reduce the players health by 1 (I will work out a damage formula at a later date)
+                GenerateToolHitboxLevel4();
+                StartCoroutine(attackCoroutine());
+                Debug.Log("Level4 Attack Achieved");
+            }
+            else if (level3Achieved == true)
+            {
+                playerStats.ReducePlayersHealth(1); //Reduce the players health by 1 (I will work out a damage formula at a later date)
+                GenerateToolHitboxLevel3();
+                StartCoroutine(attackCoroutine());
+                Debug.Log("Level3 Attack Achieved");
+            }
+            else if (level2Achieved == true)
+            {
+                playerStats.ReducePlayersHealth(1); //Reduce the players health by 1 (I will work out a damage formula at a later date)
+                GenerateToolHitboxLevel2();
+                StartCoroutine(attackCoroutine());
+                Debug.Log("Level2 Attack Achieved");
+            }
+            else if (level1Achieved == true)
+            {
+                playerStats.ReducePlayersHealth(1); //Reduce the players health by 1 (I will work out a damage formula at a later date)
+                GenerateToolHitboxLevel1();
+                StartCoroutine(attackCoroutine());
+                Debug.Log("Level1 Attack Achieved");
+            }
+
+            level1Achieved = false;
+            level2Achieved = false;
+            level3Achieved = false;
+            level4Achieved = false;
+            level5Achieved = false;
+            playerMovementDisabled = false; //Let the player move again
         }
     }
 
@@ -117,86 +202,289 @@ public class PlayerMovement : MonoBehaviour
         var direction = value.Get<Vector2>();
 
         change = new Vector3(direction.x, direction.y, 0);
-    }
+    }  
 
-
-    void OnAttack(InputAction.CallbackContext context)
+    private void GenerateToolHitboxLevel1()
     {
-        switch (context.phase)
-        {
-            case InputActionPhase.Started:
-                /* the space key was pressed */ 
-                Debug.Log("the space key was pressed");
-                break;
-    
-            case InputActionPhase.Performed:
-                /* the space key was held for 3 seconds */
-                Debug.Log("the space key was held for 3 seconds");
-                break;
-    
-            case InputActionPhase.Canceled:
-                /* the space key was released; if there was no 'Performed', it was released before 3 seconds were up */
-                Debug.Log("the space key was released; if there was no 'Performed', it was released before 3 seconds were up");
-                break;
-        }
+        Vector3 spawnPosition = new Vector3(toolHighlight.transform.position.x, toolHighlight.transform.position.y, 0);
+        GameObject obj = Instantiate(toolHitboxPrefab, spawnPosition, Quaternion.identity);
+        StartCoroutine(waitBeforeDestroy(0.33f, obj));
     }
 
-
-    void playerRaycast()
+    private void GenerateToolHitboxLevel2()
     {
-        // See: https://docs.unity3d.com/ScriptReference/Physics2D.Raycast.html & https://answers.unity.com/questions/1499447/how-to-distinguish-which-layer-has-been-hit-by-ray.html
-        requiredLayersMask = layermask1 | layermask2 | layermask3; //Logic copied from here: https://answers.unity.com/questions/1499447/how-to-distinguish-which-layer-has-been-hit-by-ray.html
-        //int layerMask = LayerMask.GetMask("Plot"); // Use whatever mask you assigned to your ground tiles (plots) (Not used, but could be useful code)
 
-        float distance = 1.0f; //Changes this to make the raycast go further?
-        Vector2 direction = this.playerDirection == PlayerDirection.Left ? Vector2.left :
-                            this.playerDirection == PlayerDirection.Right ? Vector2.right :
-                            this.playerDirection == PlayerDirection.Up ? Vector2.up : Vector2.down;
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, distance, requiredLayersMask);
-
-        Debug.Log("Player is facing: " + playerDirection);
-
-        Debug.DrawRay(transform.position, direction, Color.red, 10, false);
-        Debug.Log("Raycast: " + hit.transform);
-
-        //If the raycast collider hits another collider, Do something such as farm work or talk to a NPC
-        if (hit.collider != null)
+        if (currentPlayerDirection == PlayerDirection.Up)
         {
-
-            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("BigResource"))
-            {
-                Debug.Log("Hit a Big Resource");
-
-                if(hit.collider.tag == "rock")
-                {
-                    hit.transform.gameObject.GetComponent<BigRockScript>().DamageObject(hit);
-                }
-                else if(hit.collider.tag == "log")
-                {
-                    hit.transform.gameObject.GetComponent<BigLogScript>().DamageObject(hit);
-                }
-            }
-            else if (hit.collider.gameObject.layer == LayerMask.NameToLayer("SmallResource"))
-            {
-                Debug.Log("Hit a Small Resource");
-
-                if (hit.collider.tag == "rock")
-                {
-                    hit.transform.gameObject.GetComponent<SmallRockScript>().DamageObject(hit);
-                }
-                else if (hit.collider.tag == "log")
-                {
-                    hit.transform.gameObject.GetComponent<SmallLogScript>().DamageObject(hit);
-                }
-            }
-            else if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Plot"))
-            {
-                cropManagerController = hit.transform.gameObject.GetComponent<CropManagerController>(); //This completes the reference to the CropManagerController when the raycast hits a gameObject that is CropManagerController
-                cropManagerController.DoFarmWork(hit); //Depending on the state of the plot, this could be watering, planting a seed, cleaning rubbish etc }
-            }
+            toolHighlightOffset.x = 0.0f;
+            toolHighlightOffset.y = 1.0f;
         }
+
+        if (currentPlayerDirection == PlayerDirection.Down)
+        {
+            toolHighlightOffset.x = 0.0f;
+            toolHighlightOffset.y = -1.0f;
+        }
+
+        if (currentPlayerDirection == PlayerDirection.Left)
+        {
+            toolHighlightOffset.x = -1.0f;
+            toolHighlightOffset.y = 0.0f;
+        }
+
+        if (currentPlayerDirection == PlayerDirection.Right)
+        {
+            toolHighlightOffset.x = 1.0f; //Make this number smaller to get the hitbox closer to player (confrimed. Tweek this to optimize how close the hitbox is to the player
+            toolHighlightOffset.y = 0.0f;
+        }
+
+        Vector3 spawnPosition = new Vector3(toolHighlight.transform.position.x, toolHighlight.transform.position.y, 0);
+        GameObject obj = Instantiate(toolHitboxPrefab, spawnPosition, Quaternion.identity);
+
+        spawnPosition = new Vector3(obj.transform.position.x + toolHighlightOffset.x, obj.transform.position.y + toolHighlightOffset.y, 0); //Reset the SpawnPosition equal to the previously spawned Prefab. Then add the offset based on the playerDirection
+        GameObject obj2 = Instantiate(toolHitboxPrefab, spawnPosition, Quaternion.identity);
+
+        spawnPosition = new Vector3(obj2.transform.position.x + toolHighlightOffset.x, obj2.transform.position.y + toolHighlightOffset.y, 0); //Reset the SpawnPosition equal to the previously spawned Prefab. Then add the offset based on the playerDirection
+        GameObject obj3 = Instantiate(toolHitboxPrefab, spawnPosition, Quaternion.identity);
+
+        StartCoroutine(waitBeforeDestroy(0.33f, obj));
+        StartCoroutine(waitBeforeDestroy(0.33f, obj2));
+        StartCoroutine(waitBeforeDestroy(0.33f, obj3));
     }
 
+    private void GenerateToolHitboxLevel3()
+    {
+
+        if (currentPlayerDirection == PlayerDirection.Up)
+        {
+            toolHighlightOffset.x = 0.0f;
+            toolHighlightOffset.y = 1.0f;
+        }
+
+        if (currentPlayerDirection == PlayerDirection.Down)
+        {
+            toolHighlightOffset.x = 0.0f;
+            toolHighlightOffset.y = -1.0f;
+        }
+
+        if (currentPlayerDirection == PlayerDirection.Left)
+        {
+            toolHighlightOffset.x = -1.0f;
+            toolHighlightOffset.y = 0.0f;
+        }
+
+        if (currentPlayerDirection == PlayerDirection.Right)
+        {
+            toolHighlightOffset.x = 1.0f; //Make this number smaller to get the hitbox closer to player (confrimed. Tweek this to optimize how close the hitbox is to the player
+            toolHighlightOffset.y = 0.0f;
+        }
+
+        Vector3 spawnPosition = new Vector3(toolHighlight.transform.position.x, toolHighlight.transform.position.y, 0);
+        GameObject obj = Instantiate(toolHitboxPrefab, spawnPosition, Quaternion.identity);
+
+        spawnPosition = new Vector3(obj.transform.position.x + toolHighlightOffset.x, obj.transform.position.y + toolHighlightOffset.y, 0); //Reset the SpawnPosition equal to the previously spawned Prefab. Then add the offset based on the playerDirection
+        GameObject obj2 = Instantiate(toolHitboxPrefab, spawnPosition, Quaternion.identity);
+
+        spawnPosition = new Vector3(obj2.transform.position.x + toolHighlightOffset.x, obj2.transform.position.y + toolHighlightOffset.y, 0); //Reset the SpawnPosition equal to the previously spawned Prefab. Then add the offset based on the playerDirection
+        GameObject obj3 = Instantiate(toolHitboxPrefab, spawnPosition, Quaternion.identity);
+
+        spawnPosition = new Vector3(obj3.transform.position.x + toolHighlightOffset.x, obj3.transform.position.y + toolHighlightOffset.y, 0); //Reset the SpawnPosition equal to the previously spawned Prefab. Then add the offset based on the playerDirection
+        GameObject obj4 = Instantiate(toolHitboxPrefab, spawnPosition, Quaternion.identity);
+
+        spawnPosition = new Vector3(obj4.transform.position.x + toolHighlightOffset.x, obj4.transform.position.y + toolHighlightOffset.y, 0); //Reset the SpawnPosition equal to the previously spawned Prefab. Then add the offset based on the playerDirection
+        GameObject obj5 = Instantiate(toolHitboxPrefab, spawnPosition, Quaternion.identity);
+
+        StartCoroutine(waitBeforeDestroy(0.33f, obj));
+        StartCoroutine(waitBeforeDestroy(0.33f, obj2));
+        StartCoroutine(waitBeforeDestroy(0.33f, obj3));
+        StartCoroutine(waitBeforeDestroy(0.33f, obj4));
+        StartCoroutine(waitBeforeDestroy(0.33f, obj5));
+    }
+
+    private void GenerateToolHitboxLevel4()
+    {
+
+        if (currentPlayerDirection == PlayerDirection.Up)
+        {
+            toolHighlightOffset.x = 0.0f;
+            toolHighlightOffset.y = 1.0f;
+            hitboxOffset.x = 1.0f;  //Mutiple by -1 to reverse this
+            hitboxOffset.y = 0.0f;
+        }
+
+        if (currentPlayerDirection == PlayerDirection.Down)
+        {
+            toolHighlightOffset.x = 0.0f;
+            toolHighlightOffset.y = -1.0f;
+            hitboxOffset.x = -1.0f;  //Mutiple by -1 to reverse this
+            hitboxOffset.y = 0.0f;
+        }
+
+        if (currentPlayerDirection == PlayerDirection.Left)
+        {
+            toolHighlightOffset.x = -1.0f;
+            toolHighlightOffset.y = 0.0f;
+            hitboxOffset.x = 0.0f;  
+            hitboxOffset.y = -1.0f; //Mutiple by -1 to reverse this
+        }
+
+        if (currentPlayerDirection == PlayerDirection.Right)
+        {
+            toolHighlightOffset.x = 1.0f; //Make this number smaller to get the hitbox closer to player (confrimed. Tweek this to optimize how close the hitbox is to the player
+            toolHighlightOffset.y = 0.0f;
+            hitboxOffset.x = 0.0f;
+            hitboxOffset.y = 1.0f; //Mutiple by -1 to reverse this
+
+        }
+
+        Vector3 spawnPosition = new Vector3(toolHighlight.transform.position.x, toolHighlight.transform.position.y, 0);
+        GameObject obj = Instantiate(toolHitboxPrefab, spawnPosition, Quaternion.identity);
+
+        spawnPosition = new Vector3(obj.transform.position.x + toolHighlightOffset.x, obj.transform.position.y + toolHighlightOffset.y, 0); //Reset the SpawnPosition equal to the previously spawned Prefab. Then add the offset based on the playerDirection
+        GameObject obj2 = Instantiate(toolHitboxPrefab, spawnPosition, Quaternion.identity);
+
+        spawnPosition = new Vector3(obj2.transform.position.x + toolHighlightOffset.x, obj2.transform.position.y + toolHighlightOffset.y, 0); //Reset the SpawnPosition equal to the previously spawned Prefab. Then add the offset based on the playerDirection
+        GameObject obj3 = Instantiate(toolHitboxPrefab, spawnPosition, Quaternion.identity);
+
+        //
+        spawnPosition = new Vector3(obj.transform.position.x + hitboxOffset.x, obj.transform.position.y + hitboxOffset.y, 0); //Reset the SpawnPosition equal to the previously spawned Prefab. Then add the offset based on the playerDirection
+        GameObject objY1 = Instantiate(toolHitboxPrefab, spawnPosition, Quaternion.identity);
+
+        spawnPosition = new Vector3(obj.transform.position.x + (hitboxOffset.x * -1), obj.transform.position.y + (hitboxOffset.y *-1), 0); //Reset the SpawnPosition equal to the previously spawned Prefab. Then add the offset based on the playerDirection
+        GameObject objX1 = Instantiate(toolHitboxPrefab, spawnPosition, Quaternion.identity);
+
+        spawnPosition = new Vector3(obj2.transform.position.x + hitboxOffset.x, obj2.transform.position.y + hitboxOffset.y, 0); //Reset the SpawnPosition equal to the previously spawned Prefab. Then add the offset based on the playerDirection
+        GameObject objY2 = Instantiate(toolHitboxPrefab, spawnPosition, Quaternion.identity);
+
+        spawnPosition = new Vector3(obj2.transform.position.x + (hitboxOffset.x * -1), obj2.transform.position.y + (hitboxOffset.y * -1), 0); //Reset the SpawnPosition equal to the previously spawned Prefab. Then add the offset based on the playerDirection
+        GameObject objX2 = Instantiate(toolHitboxPrefab, spawnPosition, Quaternion.identity);
+
+        spawnPosition = new Vector3(obj3.transform.position.x + hitboxOffset.x, obj3.transform.position.y + hitboxOffset.y, 0); //Reset the SpawnPosition equal to the previously spawned Prefab. Then add the offset based on the playerDirection
+        GameObject objY3 = Instantiate(toolHitboxPrefab, spawnPosition, Quaternion.identity);
+
+        spawnPosition = new Vector3(obj3.transform.position.x + (hitboxOffset.x * -1), obj3.transform.position.y + (hitboxOffset.y * -1), 0); //Reset the SpawnPosition equal to the previously spawned Prefab. Then add the offset based on the playerDirection
+        GameObject objX3 = Instantiate(toolHitboxPrefab, spawnPosition, Quaternion.identity);
+
+        StartCoroutine(waitBeforeDestroy(0.33f, obj));
+        StartCoroutine(waitBeforeDestroy(0.33f, obj2));
+        StartCoroutine(waitBeforeDestroy(0.33f, obj3));
+        StartCoroutine(waitBeforeDestroy(0.33f, objY1));
+        StartCoroutine(waitBeforeDestroy(0.33f, objX1));
+        StartCoroutine(waitBeforeDestroy(0.33f, objY2));
+        StartCoroutine(waitBeforeDestroy(0.33f, objX2));
+        StartCoroutine(waitBeforeDestroy(0.33f, objY3));
+        StartCoroutine(waitBeforeDestroy(0.33f, objX3));
+    }
+
+    private void GenerateToolHitboxLevel5()
+    {
+
+        if (currentPlayerDirection == PlayerDirection.Up)
+        {
+            toolHighlightOffset.x = 0.0f;
+            toolHighlightOffset.y = 1.0f;
+            hitboxOffset.x = 1.0f;  //Mutiple by -1 to reverse this
+            hitboxOffset.y = 0.0f;
+        }
+
+        if (currentPlayerDirection == PlayerDirection.Down)
+        {
+            toolHighlightOffset.x = 0.0f;
+            toolHighlightOffset.y = -1.0f;
+            hitboxOffset.x = -1.0f;  //Mutiple by -1 to reverse this
+            hitboxOffset.y = 0.0f;
+        }
+
+        if (currentPlayerDirection == PlayerDirection.Left)
+        {
+            toolHighlightOffset.x = -1.0f;
+            toolHighlightOffset.y = 0.0f;
+            hitboxOffset.x = 0.0f;
+            hitboxOffset.y = -1.0f; //Mutiple by -1 to reverse this
+        }
+
+        if (currentPlayerDirection == PlayerDirection.Right)
+        {
+            toolHighlightOffset.x = 1.0f; //Make this number smaller to get the hitbox closer to player (confrimed. Tweek this to optimize how close the hitbox is to the player
+            toolHighlightOffset.y = 0.0f;
+            hitboxOffset.x = 0.0f;
+            hitboxOffset.y = 1.0f; //Mutiple by -1 to reverse this
+
+        }
+
+        Vector3 spawnPosition = new Vector3(toolHighlight.transform.position.x, toolHighlight.transform.position.y, 0);
+        GameObject obj = Instantiate(toolHitboxPrefab, spawnPosition, Quaternion.identity);
+
+        spawnPosition = new Vector3(obj.transform.position.x + toolHighlightOffset.x, obj.transform.position.y + toolHighlightOffset.y, 0); //Reset the SpawnPosition equal to the previously spawned Prefab. Then add the offset based on the playerDirection
+        GameObject obj2 = Instantiate(toolHitboxPrefab, spawnPosition, Quaternion.identity);
+
+        spawnPosition = new Vector3(obj2.transform.position.x + toolHighlightOffset.x, obj2.transform.position.y + toolHighlightOffset.y, 0); //Reset the SpawnPosition equal to the previously spawned Prefab. Then add the offset based on the playerDirection
+        GameObject obj3 = Instantiate(toolHitboxPrefab, spawnPosition, Quaternion.identity);
+
+        spawnPosition = new Vector3(obj3.transform.position.x + toolHighlightOffset.x, obj3.transform.position.y + toolHighlightOffset.y, 0); //Reset the SpawnPosition equal to the previously spawned Prefab. Then add the offset based on the playerDirection
+        GameObject obj4 = Instantiate(toolHitboxPrefab, spawnPosition, Quaternion.identity);
+
+        spawnPosition = new Vector3(obj4.transform.position.x + toolHighlightOffset.x, obj4.transform.position.y + toolHighlightOffset.y, 0); //Reset the SpawnPosition equal to the previously spawned Prefab. Then add the offset based on the playerDirection
+        GameObject obj5 = Instantiate(toolHitboxPrefab, spawnPosition, Quaternion.identity);
+
+        spawnPosition = new Vector3(obj5.transform.position.x + toolHighlightOffset.x, obj5.transform.position.y + toolHighlightOffset.y, 0); //Reset the SpawnPosition equal to the previously spawned Prefab. Then add the offset based on the playerDirection
+        GameObject obj6 = Instantiate(toolHitboxPrefab, spawnPosition, Quaternion.identity);
+
+        spawnPosition = new Vector3(obj.transform.position.x + hitboxOffset.x, obj.transform.position.y + hitboxOffset.y, 0); //Reset the SpawnPosition equal to the previously spawned Prefab. Then add the offset based on the playerDirection
+        GameObject objY1 = Instantiate(toolHitboxPrefab, spawnPosition, Quaternion.identity);
+
+        spawnPosition = new Vector3(obj.transform.position.x + (hitboxOffset.x * -1), obj.transform.position.y + (hitboxOffset.y * -1), 0); //Reset the SpawnPosition equal to the previously spawned Prefab. Then add the offset based on the playerDirection
+        GameObject objX1 = Instantiate(toolHitboxPrefab, spawnPosition, Quaternion.identity);
+
+        spawnPosition = new Vector3(obj2.transform.position.x + hitboxOffset.x, obj2.transform.position.y + hitboxOffset.y, 0); //Reset the SpawnPosition equal to the previously spawned Prefab. Then add the offset based on the playerDirection
+        GameObject objY2 = Instantiate(toolHitboxPrefab, spawnPosition, Quaternion.identity);
+
+        spawnPosition = new Vector3(obj2.transform.position.x + (hitboxOffset.x * -1), obj2.transform.position.y + (hitboxOffset.y * -1), 0); //Reset the SpawnPosition equal to the previously spawned Prefab. Then add the offset based on the playerDirection
+        GameObject objX2 = Instantiate(toolHitboxPrefab, spawnPosition, Quaternion.identity);
+
+        spawnPosition = new Vector3(obj3.transform.position.x + hitboxOffset.x, obj3.transform.position.y + hitboxOffset.y, 0); //Reset the SpawnPosition equal to the previously spawned Prefab. Then add the offset based on the playerDirection
+        GameObject objY3 = Instantiate(toolHitboxPrefab, spawnPosition, Quaternion.identity);
+
+        spawnPosition = new Vector3(obj3.transform.position.x + (hitboxOffset.x * -1), obj3.transform.position.y + (hitboxOffset.y * -1), 0); //Reset the SpawnPosition equal to the previously spawned Prefab. Then add the offset based on the playerDirection
+        GameObject objX3 = Instantiate(toolHitboxPrefab, spawnPosition, Quaternion.identity);
+
+        spawnPosition = new Vector3(obj4.transform.position.x + hitboxOffset.x, obj4.transform.position.y + hitboxOffset.y, 0); //Reset the SpawnPosition equal to the previously spawned Prefab. Then add the offset based on the playerDirection
+        GameObject objY4 = Instantiate(toolHitboxPrefab, spawnPosition, Quaternion.identity);
+
+        spawnPosition = new Vector3(obj4.transform.position.x + (hitboxOffset.x * -1), obj4.transform.position.y + (hitboxOffset.y * -1), 0); //Reset the SpawnPosition equal to the previously spawned Prefab. Then add the offset based on the playerDirection
+        GameObject objX4 = Instantiate(toolHitboxPrefab, spawnPosition, Quaternion.identity);
+
+        spawnPosition = new Vector3(obj5.transform.position.x + hitboxOffset.x, obj5.transform.position.y + hitboxOffset.y, 0); //Reset the SpawnPosition equal to the previously spawned Prefab. Then add the offset based on the playerDirection
+        GameObject objY5 = Instantiate(toolHitboxPrefab, spawnPosition, Quaternion.identity);
+
+        spawnPosition = new Vector3(obj5.transform.position.x + (hitboxOffset.x * -1), obj5.transform.position.y + (hitboxOffset.y * -1), 0); //Reset the SpawnPosition equal to the previously spawned Prefab. Then add the offset based on the playerDirection
+        GameObject objX5 = Instantiate(toolHitboxPrefab, spawnPosition, Quaternion.identity);
+
+        spawnPosition = new Vector3(obj6.transform.position.x + hitboxOffset.x, obj6.transform.position.y + hitboxOffset.y, 0); //Reset the SpawnPosition equal to the previously spawned Prefab. Then add the offset based on the playerDirection
+        GameObject objY6 = Instantiate(toolHitboxPrefab, spawnPosition, Quaternion.identity);
+
+        spawnPosition = new Vector3(obj6.transform.position.x + (hitboxOffset.x * -1), obj6.transform.position.y + (hitboxOffset.y * -1), 0); //Reset the SpawnPosition equal to the previously spawned Prefab. Then add the offset based on the playerDirection
+        GameObject objX6 = Instantiate(toolHitboxPrefab, spawnPosition, Quaternion.identity);
+
+        StartCoroutine(waitBeforeDestroy(0.33f, obj));
+        StartCoroutine(waitBeforeDestroy(0.33f, obj2));
+        StartCoroutine(waitBeforeDestroy(0.33f, obj3));
+        StartCoroutine(waitBeforeDestroy(0.33f, obj4));
+        StartCoroutine(waitBeforeDestroy(0.33f, obj5));
+        StartCoroutine(waitBeforeDestroy(0.33f, obj6));
+        StartCoroutine(waitBeforeDestroy(0.33f, objY1));
+        StartCoroutine(waitBeforeDestroy(0.33f, objX1));
+        StartCoroutine(waitBeforeDestroy(0.33f, objY2));
+        StartCoroutine(waitBeforeDestroy(0.33f, objX2));
+        StartCoroutine(waitBeforeDestroy(0.33f, objY3));
+        StartCoroutine(waitBeforeDestroy(0.33f, objX3));
+        StartCoroutine(waitBeforeDestroy(0.33f, objY4));
+        StartCoroutine(waitBeforeDestroy(0.33f, objX4));
+        StartCoroutine(waitBeforeDestroy(0.33f, objY5));
+        StartCoroutine(waitBeforeDestroy(0.33f, objX5));
+        StartCoroutine(waitBeforeDestroy(0.33f, objY6));
+        StartCoroutine(waitBeforeDestroy(0.33f, objX6));
+    }
 
     //This method is called during the update() and will be responsible for updating the players direction to be up, down, left or right. The players direction can be access via playerDirection
     void checkPlayerDirection()
@@ -243,21 +531,12 @@ public class PlayerMovement : MonoBehaviour
             MoveCharacter();
             animator.SetFloat("moveX", change.x); //This sets the moveX variable defined in the animatior equal to the player x position defined in the change variable by the player input
             animator.SetFloat("moveY", change.y); //This sets the moveY variable defined in the animatior equal to the player y position defined in the change variable by the player input
-            animator.SetBool("moving", true); //When moving is true, the blend tree will transistion from the Idle state to the moving state. What i do not understand is how the code understands that
-            //the sprite is moving therefore transition to moving. My guess is the animator.setbool function can detect this
+            animator.SetBool("moving", true); //When moving is true, the blend tree will transistion from the Idle state to the moving state. What i do not understand is how the code understands that the sprite is moving therefore transition to moving. My guess is the animator.setbool function can detect this
         }
         else
         {
             animator.SetBool("moving", false); //When moving is false, the blend tree will transistion from the moving state to the idle state
         }
-    }
-
-
-    private void OnMove()
-    {
-        //Debug.Log("Moving?");
-        
-        
     }
 
     //The below method has been defined to allow me to call the player movement from other places as needed (Such as using onscreen buttons)
@@ -331,9 +610,10 @@ public class PlayerMovement : MonoBehaviour
 
 
     //This is a untitity function, it ia used to wait a certain amount of seconds
-    public IEnumerator waitForTime(float seconds)
+    public IEnumerator waitBeforeDestroy(float seconds, GameObject obj)
     {
         yield return new WaitForSeconds(seconds);
+        Destroy(obj);
     }
 
 
@@ -379,71 +659,126 @@ public class PlayerMovement : MonoBehaviour
     */
 
 
-    //This is another way to play animations but the playAnimationSimple() does the trick.
-    /*
-    public void playAnimation()
+//This is another way to play animations but the playAnimationSimple() does the trick.
+/*
+public void playAnimation()
+{
+    playerUsingItem = true;
+
+    playableGraph = PlayableGraph.Create();
+
+    playableGraph.SetTimeUpdateMode(DirectorUpdateMode.GameTime);
+
+    var playableOutput = AnimationPlayableOutput.Create(playableGraph, "Animation", GetComponent<Animator>());
+
+    // Wrap the clip in a playable
+
+    var clipPlayable = AnimationClipPlayable.Create(playableGraph, clip);
+
+    // Connect the Playable to an output
+
+    playableOutput.SetSourcePlayable(clipPlayable);
+
+    // Plays the Graph.
+
+    playableGraph.Play();
+
+    //yield return new WaitForSeconds(5.0f);
+
+    Debug.Log("Animation has been played");
+
+}
+
+IEnumerator stopAnimation()
+{
+    // Destroys all Playables and PlayableOutputs created by the graph.
+    //playableGraph.Destroy();
+
+    //StartCoroutine(waitForTime(5.0f));
+    yield return new WaitForSeconds(0.33f);
+
+    playableGraph.Stop();
+    Debug.Log("Animation has been stopped");
+
+    playerUsingItem = false;
+
+}
+*/
+
+//Knockback is old code used from the original idea of a zelda style game. It is probably not needed anymore unless i add combat into the game.
+/*
+public void Knock(float knockBackTime)
+{
+    StartCoroutine(KnockBackCo(knockBackTime)); //By Creating the knockback as a coroutine in the player, it allows the player object to monitor its own knockback
+}
+
+private IEnumerator KnockBackCo(float knockBackTime)
+{
+
+    if (myRigidbody != null)
     {
-        playerUsingItem = true;
-
-        playableGraph = PlayableGraph.Create();
-
-        playableGraph.SetTimeUpdateMode(DirectorUpdateMode.GameTime);
-
-        var playableOutput = AnimationPlayableOutput.Create(playableGraph, "Animation", GetComponent<Animator>());
-
-        // Wrap the clip in a playable
-
-        var clipPlayable = AnimationClipPlayable.Create(playableGraph, clip);
-
-        // Connect the Playable to an output
-
-        playableOutput.SetSourcePlayable(clipPlayable);
-
-        // Plays the Graph.
-
-        playableGraph.Play();
-
-        //yield return new WaitForSeconds(5.0f);
-
-        Debug.Log("Animation has been played");
-
+        yield return new WaitForSeconds(knockBackTime); //How long to wait
+        myRigidbody.velocity = Vector2.zero;
+        currentState = PlayerState.idle; //sets the player state machine to back to idle
+        myRigidbody.velocity = Vector2.zero;
     }
 
-    IEnumerator stopAnimation()
+}
+*/
+
+/*
+ void playerRaycast()
+{
+    // See: https://docs.unity3d.com/ScriptReference/Physics2D.Raycast.html & https://answers.unity.com/questions/1499447/how-to-distinguish-which-layer-has-been-hit-by-ray.html
+    requiredLayersMask = layermask1 | layermask2 | layermask3; //Logic copied from here: https://answers.unity.com/questions/1499447/how-to-distinguish-which-layer-has-been-hit-by-ray.html
+    //int layerMask = LayerMask.GetMask("Plot"); // Use whatever mask you assigned to your ground tiles (plots) (Not used, but could be useful code)
+
+    float distance = 1.0f; //Changes this to make the raycast go further?
+    Vector2 direction = this.playerDirection == PlayerDirection.Left ? Vector2.left :
+                        this.playerDirection == PlayerDirection.Right ? Vector2.right :
+                        this.playerDirection == PlayerDirection.Up ? Vector2.up : Vector2.down;
+    RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, distance, requiredLayersMask);
+
+    Debug.Log("Player is facing: " + playerDirection);
+
+    Debug.DrawRay(transform.position, direction, Color.red, 10, false);
+    Debug.Log("Raycast: " + hit.transform);
+
+    //If the raycast collider hits another collider, Do something such as farm work or talk to a NPC
+    if (hit.collider != null)
     {
-        // Destroys all Playables and PlayableOutputs created by the graph.
-        //playableGraph.Destroy();
 
-        //StartCoroutine(waitForTime(5.0f));
-        yield return new WaitForSeconds(0.33f);
-
-        playableGraph.Stop();
-        Debug.Log("Animation has been stopped");
-
-        playerUsingItem = false;
-
-    }
-    */
-
-    //Knockback is old code used from the original idea of a zelda style game. It is probably not needed anymore unless i add combat into the game.
-    /*
-    public void Knock(float knockBackTime)
-    {
-        StartCoroutine(KnockBackCo(knockBackTime)); //By Creating the knockback as a coroutine in the player, it allows the player object to monitor its own knockback
-    }
-
-    private IEnumerator KnockBackCo(float knockBackTime)
-    {
-
-        if (myRigidbody != null)
+        if (hit.collider.gameObject.layer == LayerMask.NameToLayer("BigResource"))
         {
-            yield return new WaitForSeconds(knockBackTime); //How long to wait
-            myRigidbody.velocity = Vector2.zero;
-            currentState = PlayerState.idle; //sets the player state machine to back to idle
-            myRigidbody.velocity = Vector2.zero;
-        }
+            Debug.Log("Hit a Big Resource");
 
+            if(hit.collider.tag == "rock")
+            {
+                hit.transform.gameObject.GetComponent<BigRockScript>().DamageObject(hit);
+            }
+            else if(hit.collider.tag == "log")
+            {
+                hit.transform.gameObject.GetComponent<BigLogScript>().DamageObject(hit);
+            }
+        }
+        else if (hit.collider.gameObject.layer == LayerMask.NameToLayer("SmallResource"))
+        {
+            Debug.Log("Hit a Small Resource");
+
+            if (hit.collider.tag == "rock")
+            {
+                hit.transform.gameObject.GetComponent<SmallRockScript>().DamageObject(hit);
+            }
+            else if (hit.collider.tag == "log")
+            {
+                hit.transform.gameObject.GetComponent<SmallLogScript>().DamageObject(hit);
+            }
+        }
+        else if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Plot"))
+        {
+            cropManagerController = hit.transform.gameObject.GetComponent<CropManagerController>(); //This completes the reference to the CropManagerController when the raycast hits a gameObject that is CropManagerController
+            cropManagerController.DoFarmWork(hit); //Depending on the state of the plot, this could be watering, planting a seed, cleaning rubbish etc }
+        }
     }
     */
-
 }

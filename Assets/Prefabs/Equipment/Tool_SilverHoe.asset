@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bf5d262cb6f184e4da07b5c96a2fe8a3, type: 3}
-  m_Name: Tool_BronzeHoe
+  m_Name: Tool_SilverHoe
   m_EditorClassIdentifier: 
-  _icon: {fileID: 21300000, guid: da316ce9127c01f4c809e354eff9f042, type: 3}
+  _icon: {fileID: 21300002, guid: da316ce9127c01f4c809e354eff9f042, type: 3}
   _stackSize: 0
   numberOfUses: 0
   isTool: 1
   equipmentType: 0
-  toolLevel: 1
+  toolLevel: 2
   stage1: {fileID: 0}
   stage1watered: {fileID: 0}
   stage2: {fileID: 0}
@@ -33,7 +33,7 @@ MonoBehaviour:
   harvestableAmount: 0
   plantSeason: 0
   item: {fileID: 0}
-  clipDown: {fileID: 7400000, guid: a8af4faa4998a5c42b4488b1e29d744c, type: 2}
-  clipLeft: {fileID: 7400000, guid: 59d580cb635e56848b6f6b954823fd6c, type: 2}
-  clipRight: {fileID: 7400000, guid: 7aa4c6be13a61374685ea42dbd8ff8b4, type: 2}
-  clipUp: {fileID: 7400000, guid: 8b96bab4efcf3324a8ddebf7bc4014a3, type: 2}
+  clipDown: {fileID: 0}
+  clipLeft: {fileID: 0}
+  clipRight: {fileID: 0}
+  clipUp: {fileID: 0}
