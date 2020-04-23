@@ -19,28 +19,29 @@ public class ToolHighlight : MonoBehaviour
         if (player.currentPlayerDirection == PlayerDirection.Up)
         {
             offset.x = 0.0f;
-            offset.y = 1.5f;
+            offset.y = 1.0f;
         }
 
         if (player.currentPlayerDirection == PlayerDirection.Down)
         {
             offset.x = 0.0f;
-            offset.y = -1.5f;
+            offset.y = -1.0f;
         }
 
         if (player.currentPlayerDirection == PlayerDirection.Left)
         {
-            offset.x = -1.5f;
+            offset.x = -1.0f;
             offset.y = 0.0f;
         }
 
         if (player.currentPlayerDirection == PlayerDirection.Right)
         {
-            offset.x = 1.5f; //Make this number smaller to get the hitbox closer to player (confrimed. Tweek this to optimize how close the hitbox is to the player
+            offset.x = 1.0f; //Make this number smaller to get the hitbox closer to player (confrimed. Tweek this to optimize how close the hitbox is to the player
             offset.y = 0.0f;
         }
 
         //transform.position = new Vector3(Mathf.Round(player.transform.position.x) + offset.x, Mathf.Round(player.transform.position.y) + offset.y);
-        transform.position = new Vector3((Mathf.Round(player.transform.position.x * 2f) * 0.5f) + offset.x, (Mathf.Round(player.transform.position.y * 2f) * 0.5f) + offset.y);
+        //transform.position = new Vector3((Mathf.Round(player.transform.position.x * 2f) * 0.5f) + offset.x, (Mathf.Round(player.transform.position.y * 2f) * 0.5f) + offset.y);
+        transform.position = new Vector3((Mathf.Sign(player.transform.position.x) * (Mathf.Abs((int)player.transform.position.x) + 0.5f) + offset.x), (Mathf.Sign(player.transform.position.y) * (Mathf.Abs((int)player.transform.position.y) + 0.5f) + offset.y), 10);
     }
 }

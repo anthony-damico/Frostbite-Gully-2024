@@ -16,7 +16,7 @@ swoop7_1109/17/2019
 that function references that particular class's transform.
 hmmmm
 not sure how that would work, the hit doesn't know which components or scripts it has
-hit.    // raycast hit
+    // raycast hit
    transform.    // transform of what the raycast hit
    gameObject.    // gameObject of what the raycast hit
    GetComponent<CropManager>().    // get the CropManager script
@@ -25,7 +25,7 @@ hmmm
 i wonder if
      
    
-hit. // raycast 
+ // raycast 
      GetComponent<CropManager>().     // get the CropManager script
      SpriteChange(stage2watered);     // Now I have access to this method
 would work
@@ -149,7 +149,7 @@ public class CropManagerController : MonoBehaviour
     }
 
     //This will do the farm work
-    public void DoFarmWork(bool hit) //The raycast is passed in from the PlayerMovement.cs script
+    public void DoFarmWork() //The raycast is passed in from the PlayerMovement.cs script
     {
         //Import Debug Step
         Debug.Log("♫ Working on the Farm on all day, everybody sing the farming song ♫" + " " + this.name); //Do Planting Stuff
@@ -166,19 +166,19 @@ public class CropManagerController : MonoBehaviour
         //Step 2: Hoe Tile
         if(equipmentManager.currentEquipment.equipmentType == ToolType.hoe && isTilled == false) //Checks to see of the ToolType "Hoe" is equipped and the land is not yet tilled
         {
-            HoeTite(hit); //If a hoe is equip, hoe the land
+            HoeTite(); //If a hoe is equip, hoe the land
         }
 
         //Step 3: Plant Seed
         if(equipmentManager.currentEquipment.equipmentType == ToolType.seed && isTilled == true && isPlanted == false) //Check if the land has been hoed and if a seed is Equip
         {
-            //PlantSeed(hit);
+            PlantSeed();
         }
 
         //Step 4: Water tile and/or seed
         if (equipmentManager.currentEquipment.equipmentType == ToolType.wateringCan)
         {
-            //AddWateredState(hit);
+            AddWateredState();
         }
 
         //Step 6: Harvest crop
@@ -189,7 +189,7 @@ public class CropManagerController : MonoBehaviour
     }
 
     //This will change the graphic to "tilledTile"
-    void HoeTite(bool hit) //Each Planting Function (Hoe, Seed, Water etc will need to take a RaycastHit2D so that the raycast projected from the player knows what it has hit and what it is doing
+    void HoeTite() //Each Planting Function (Hoe, Seed, Water etc will need to take a RaycastHit2D so that the raycast projected from the player knows what it has hit and what it is doing
     {
             //Till Land and tell the plot it is ready to accept a seed
             Debug.Log("Land has been tilled on " + this.name);
@@ -198,72 +198,72 @@ public class CropManagerController : MonoBehaviour
     }
 
     //Plant seed and prevent the plot being overwritten with another seed by setting isPlanted to True
-    void PlantSeed(RaycastHit2D hit)
+    void PlantSeed()
     {
         GetSeedInfo(); //This will get the type of seed being planted from the currently equipped seed
-        Debug.Log(equipmentManager.currentEquipment.name + "  has been planted on " + hit.collider.name);
-        hit.transform.GetComponent<SpriteRenderer>().sprite = seedTile; //Change the tile graphic to the seed sprite
+        Debug.Log(equipmentManager.currentEquipment.name + "  has been planted on " + this.name);
+        transform.GetComponent<SpriteRenderer>().sprite = seedTile; //Change the tile graphic to the seed sprite
         isPlanted = true; //Seed has been planted, plot can't be overwritten (hopefully)
         isEmpty = false;
 
         //This is called here, just in case a tile has already been watered when a seed is planted. Will only trigger if isWatered == True
         if (isWatered == true)
         {
-            AddWateredState(hit); 
+            AddWateredState(); 
         }
     }
     
     //Water the crop
-    void AddWateredState(RaycastHit2D hit)
+    void AddWateredState()
     {
 
         //Change the tile graphic to "tilledWateredTite" if it has been tilled, does not have a seed and is not yet watered
         if (isTilled == true && isPlanted == false && isWatered == false && stage1 == false && stage2 == false && stage3 == false && isStageRegrow == false)
         {
-            Debug.Log("Watered the tilled land on " + hit.collider.name);
-            hit.transform.GetComponent<SpriteRenderer>().sprite = tilledWateredTile;
+            Debug.Log("Watered the tilled land on " + this.name);
+            transform.GetComponent<SpriteRenderer>().sprite = tilledWateredTile;
         }
 
         //Change the graphic to "seedWateredTile" if the tile has been tilled and watered
         if (isTilled == true && isPlanted == true && isWatered == true && stage1 == false && stage2 == false && stage3 == false && isStageRegrow == false)
         {
-            Debug.Log("Seed is already watered on " + hit.collider.name);
-            hit.transform.GetComponent<SpriteRenderer>().sprite = seedWateredTile;
+            Debug.Log("Seed is already watered on " + this.name);
+            transform.GetComponent<SpriteRenderer>().sprite = seedWateredTile;
         }
 
         //Change the graphic to "seedWateredTile" if the tile has a seed on it
         if (isPlanted == true && isWatered == false)
         {
-            Debug.Log("Watered the seed on " + hit.collider.name);
-            hit.transform.GetComponent<SpriteRenderer>().sprite = seedWateredTile;
+            Debug.Log("Watered the seed on " + this.name);
+            transform.GetComponent<SpriteRenderer>().sprite = seedWateredTile;
         }
 
         //Check if the plant is in stage1 and set the watered graphic to stage1watered
         if (isPlanted == true && isStage1 == true && isWatered == false)
         {
-            Debug.Log("Staged 1 watered successful on" + hit.collider.name);
-            hit.transform.GetComponent<SpriteRenderer>().sprite = stage1watered;
+            Debug.Log("Staged 1 watered successful on" + this.name);
+            transform.GetComponent<SpriteRenderer>().sprite = stage1watered;
         }
         
         //Check if the plant is in stage2 and set the watered graphic to stage2watered
         if (isPlanted == true && isStage2 == true && isWatered == false)
         {
-            Debug.Log("Staged 2 watered successful on " + hit.collider.name);
-            hit.transform.GetComponent<SpriteRenderer>().sprite = stage2watered;
+            Debug.Log("Staged 2 watered successful on " + this.name);
+            transform.GetComponent<SpriteRenderer>().sprite = stage2watered;
         }
         
         //Check if the plant is in stage3 and set the watered graphic to stage3watered
         if (isPlanted == true && isStage3 == true && isWatered == false)
         {
-            Debug.Log("Staged 3 watered successful on " + hit.collider.name);
-            hit.transform.GetComponent<SpriteRenderer>().sprite = stage3watered;
+            Debug.Log("Staged 3 watered successful on " + this.name);
+            transform.GetComponent<SpriteRenderer>().sprite = stage3watered;
         }
 
         //Check if the plant is in stageRegrow and set the watered graphic to stage2watered (This is temp)
         if (isPlanted == true && isStageRegrow == true && isWatered == false)
         {
-            Debug.Log("Staged 2 watered successful on " + hit.collider.name);
-            hit.transform.GetComponent<SpriteRenderer>().sprite = stage2watered;
+            Debug.Log("Staged 2 watered successful on " + this.name);
+            transform.GetComponent<SpriteRenderer>().sprite = stage2watered;
         }
 
         isWatered = true;
@@ -530,7 +530,7 @@ public class CropManagerController : MonoBehaviour
             else if (collision.IsTouchingLayers(layerMask: 1 << LayerMask.NameToLayer("Plot"))) //Plot Layer
             {
                 Debug.Log("Hit " + this.name + " which is a plot");
-                DoFarmWork(true);
+                DoFarmWork();
             }
         }
     }
