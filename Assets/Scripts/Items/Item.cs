@@ -20,8 +20,10 @@ public abstract class Item : ScriptableObject, IMoveable
     private int _stackSize; //This will determine if a item can stack. If it is a 0 or 1, the item is not stackable
 
     //An item needs a reference to the slot it is sitting on. This is how the item knows what slot it is sitting on
-    private SlotScript _slot;
-    
+    private SlotScript _slot; //Will be depricated
+
+    private SlotScriptV2 _InventorySlot; //An item needs a reference to the slot it is sitting on. This is how the item knows what slot it is sitting on
+
     public Sprite MyIcon
     {
         get
@@ -40,6 +42,8 @@ public abstract class Item : ScriptableObject, IMoveable
 
     }
 
+
+    //This property will be depricated
     //A Slot needs a GET and SET. We need to beable to get the Item in the Slot, but we also need to beable to see a new item to a slot. This is how the item knows what slot it is sitting on
     public SlotScript MySlot
     {
@@ -50,6 +54,20 @@ public abstract class Item : ScriptableObject, IMoveable
         set
         {
             _slot = value;
+        }
+    }
+
+
+    //A Slot needs a GET and SET. We need to beable to get the Item in the Slot, but we also need to beable to see a new item to a slot. This is how the item knows what slot it is sitting on
+    public SlotScriptV2 MyInventorySlot
+    {
+        get
+        {
+            return _InventorySlot;
+        }
+        set
+        {
+            _InventorySlot = value;
         }
     }
 

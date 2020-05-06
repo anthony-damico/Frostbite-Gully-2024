@@ -29,7 +29,7 @@ public class InventoryScript : MonoBehaviour
 
     //This is for Debugging
     [SerializeField]
-    public Item[] _items; //This create an array against the inventory GameObject that will accept the scripable obekjct "Item"
+    public Item[] _items; //This create an array against the inventory GameObject that will accept the scripable object "Item"
 
 
     //This is a reference to the slotscript so i can access the properties of the slot
@@ -159,7 +159,7 @@ public class InventoryScript : MonoBehaviour
     {
         if(item.MyStackSize > 0)
         {
-            if(PlaceInStack(item) == true)
+            if(PlaceInStack(item) == true) //If placeInStack returns true, return from the method
             {
                 return;
             }

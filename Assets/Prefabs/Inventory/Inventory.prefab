@@ -56,7 +56,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 217143050788167899}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -2095666955, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
@@ -80,11 +80,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 217143050788167899}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1741964061, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_HorizontalFit: 1
-  m_VerticalFit: 0
+  m_VerticalFit: 1
 --- !u!114 &2011721361174841745
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -97,3 +97,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42c9f52179a8b6e47b3a172c79a927da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _bagButtons: []
+  _items: []
