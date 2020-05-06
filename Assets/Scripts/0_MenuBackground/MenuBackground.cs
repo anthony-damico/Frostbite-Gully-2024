@@ -9,7 +9,7 @@ public class MenuBackground : MonoBehaviour
 
     private void Update()
     {
-        if(isMenuOpen)
+        if (isMenuOpen)
         {
 
         }
