@@ -5,6 +5,8 @@ using UnityEngine;
 public class BagScript : MonoBehaviour
 {
 
+    //Future Anthony, If your method/Variable is using a get/set, it is a property. If you declare a public bool <Name> {} with no get or set, it is a method.
+
     [SerializeField]
     private GameObject slotPrefab; //This will be the Slot Prefab
 

@@ -10,6 +10,7 @@ public class DebugManagerScript : MonoBehaviour
     //References to Other Classes/Scripts via Singleton
     TimeManagerController timeManagerController; //Creates a reference back to the TimeManagerControllerScript to get access to the different time, day and season variables
     InventoryScript inventoryScript; //Create a referene back to the Inventory Script so i can add items to the inventory easily.
+    InventoryScriptV2 inventoryScriptV2; //Create a referene back to the Inventory Script so i can add items to the inventory easily.
 
 
     public bool _active = false;
@@ -21,6 +22,7 @@ public class DebugManagerScript : MonoBehaviour
     {
         timeManagerController = TimeManagerController.instance; //Completes the reference back to the TimeManagerController.cs script using the singleton
         inventoryScript = InventoryScript.instance; //Completes the reference back to the InventoryScript.cs script using the singleton
+        inventoryScriptV2 = InventoryScriptV2.instance; //Completes the reference back to the InventoryScript.cs script using the singleton
     }
 
     private void Update()
@@ -54,7 +56,9 @@ public class DebugManagerScript : MonoBehaviour
             DisplayCheat("Close Cheat Menu", () => _active = false);
             DisplayCheat("Skip Day", () => DebugSkipTime());
             DisplayCheat("Add Items To Inventory", () => DebugAddItemsToInventory());
+            DisplayCheat("Add Items To InventoryV2", () => DebugAddItemsToInventoryV2());
             DisplayCheat("Add Corn To Inventory", () => DebugAddCornToInventory());
+            DisplayCheat("Add Corn To InventoryV2", () => DebugAddCornToInventoryV2());
             DisplayCheat("Create 20 Slot Bag", () => DebugCreate20SlotBag());
 
             GUILayout.FlexibleSpace();
@@ -119,12 +123,40 @@ public class DebugManagerScript : MonoBehaviour
         inventoryScript.AddItem(tool);
     }
 
+    //Add items to inventoryV2
+    void DebugAddItemsToInventoryV2()
+    {
+        //The below is used as a debug to add a bag item to the inventory
+        Equipment tool = (Equipment)Instantiate(inventoryScriptV2._items[0]); //This initizes the Item in slot 3 in the item array
+        inventoryScriptV2.AddItemToInventory(tool);
+
+        tool = (Equipment)Instantiate(inventoryScriptV2._items[1]); //This initizes the Item in slot 4 in the item array
+        inventoryScriptV2.AddItemToInventory(tool);
+
+        tool = (Equipment)Instantiate(inventoryScriptV2._items[2]); //This initizes the Item in slot 5 in the item array
+        inventoryScriptV2.AddItemToInventory(tool);
+
+        tool = (Equipment)Instantiate(inventoryScriptV2._items[3]); //This initizes the Item in slot 6 in the item array
+        inventoryScriptV2.AddItemToInventory(tool);
+
+        tool = (Equipment)Instantiate(inventoryScriptV2._items[4]); //This initizes the Item in slot 7 in the item array
+        inventoryScriptV2.AddItemToInventory(tool);
+    }
+
     //Add Corn Item to Inventory
     void DebugAddCornToInventory()
     {
         //The below is used as a debug to add a bag item to the inventory
         Corn corn = (Corn)Instantiate(inventoryScript._items[1]); //This initizes the Item in slot 0 in the item array
         inventoryScript.AddItem(corn);
+    }
+
+    //Add Corn Item to InventoryV2
+    void DebugAddCornToInventoryV2()
+    {
+        //The below is used as a debug to add a bag item to the inventory
+        Corn corn = (Corn)Instantiate(inventoryScriptV2._items[5]); //This initizes the Item in slot 0 in the item array
+        inventoryScriptV2.AddItemToInventory(corn);
     }
 
     //Add a 20 Slot Bag

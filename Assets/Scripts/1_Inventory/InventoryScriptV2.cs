@@ -23,16 +23,40 @@ public class InventoryScriptV2 : MonoBehaviour
     #endregion
 
 
+    //Variables
     //This is for Debugging
     [SerializeField]
     public int inventorySizeLimit = 36; //This is the max size of the inventory
     public List<Item> _items = new List<Item>(); //This create a a list against the inventory GameObject that will accept the scripable object "Item"
     public List<SlotScriptV2> _slots = new List<SlotScriptV2>(); //This is a list of all slots in the inventory. The slots are linked to this list via the unity inspector
-    
-    //Add Items
+
+
+    //Properties
+
+
+    //Unity Methods
+
+
+    //Methods
+
+    /// <summary>
+    /// Add an Item to the Inventory. Takes a parameter of "item"
+    /// This might have to become a bool at a later date just incase i am adding items picked up off the ground
+    /// </summary>
+    /// <param name="item"></param>
     public void AddItemToInventory(Item item)
     {
-        _items.Add(item); //Add is a build in function of the List Type. It will Add whatever Object is specified as long as the Object Type matches the list type
+        //Add to stack
+        if (item.MyStackSize > 0)
+        {
+            if (PlaceInStackSlot(item) == true) //If placeInStack returns true, return from the method
+            {
+                return;
+            }
+        }
+
+        //If can't add to stack, add to empty slot
+        PlaceInEmptySlot(item);
     }
 
     //Remove Items
@@ -43,15 +67,37 @@ public class InventoryScriptV2 : MonoBehaviour
 
     //Move Items
 
-    // Start is called before the first frame update
-    void Start()
+
+    //This method is called if the AddItemToInventory Method determines that an item needs to be added to a new empty slot.
+    private bool PlaceInEmptySlot(Item item)
     {
-        
+        //Check each slot, to determine if an item can be added
+        foreach (SlotScriptV2 slot in _slots)
+        {
+            Debug.Log("Debug " + slot.name); //Remove This later
+            Debug.Log("Debug IsEmpty: " + slot.isEmpty); //Remove this later
+            if (slot.isEmpty == true) //isEmpty is located on SlotScriptV2. If isEmpty is true, proceed to add the item to the slot
+            {
+                slot.AddItemToSlot(item); //If the slot is empty, add the item and return true if the item was added
+                return true;
+            }
+        }
+
+        return false; //If the above paths do not return a true, the we return false. In this case, after each slot is checked, if no slots return true, we return fasle as we could not add an Item
     }
 
-    // Update is called once per frame
-    void Update()
+
+    private bool PlaceInStackSlot(Item item)
     {
-        
+        foreach (SlotScriptV2 slot in _slots)
+        {
+            if (slot.AddItemToStack(item))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
+
 }
