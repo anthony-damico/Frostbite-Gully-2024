@@ -71,6 +71,12 @@ public abstract class Item : ScriptableObject, IMoveable
         }
     }
 
+
+    public virtual void UseItem()
+    {
+
+    }
+
     //Whenever an Item is used, this remove function will allow the item to remove itself from the inventory. Any Items that inherit from this script will have this functionality
     public void Remove()
     {

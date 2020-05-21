@@ -1,5 +1,5 @@
 {
-    "name": "2D Project",
+    "name": "FbGInputSystem",
     "maps": [
         {
             "name": "Player",
@@ -26,6 +26,14 @@
                     "type": "Button",
                     "id": "127fc1bc-bebe-4e81-a088-894f45077d94",
                     "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "AttackV2",
+                    "type": "Button",
+                    "id": "87be7b55-37d2-4759-9692-cfe9cc09422a",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": ""
                 }
@@ -259,6 +267,17 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "Attack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ecca398c-5266-4ebd-bc77-fc5a93027ba9",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "AttackV2",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

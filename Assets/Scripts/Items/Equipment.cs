@@ -5,7 +5,7 @@ using UnityEngine.Playables;
 using UnityEngine.Animations;
 
 [CreateAssetMenu(fileName = "New Equipment", menuName = "Inventory/Equipment")]
-public class Equipment : Item, IUseable
+public class Equipment : Item, IUseable //Remove IUsable at some point once V1 Inventory is removed
 {
     public int numberOfUses; //How many times the item can be used before it expires
     public bool isTool; //Defines whether the item is a tool so it can't expire / run out of uses
@@ -40,11 +40,18 @@ public class Equipment : Item, IUseable
     /////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////
 
-    public void Use()
+    public void Use() //This has been depricated as I no longer use the IUsable Interface
     {
         Debug.Log("The tool " + name + " has been equipped.");
         EquipmentManager.instance.Equip(this); //Equip the Item that is click on in the inventroy
         //Remove From Inventory
+    }
+
+    public override void UseItem()
+    {
+        base.UseItem();
+        Debug.Log("The tool " + name + " has been equipped.");
+        EquipmentManager.instance.Equip(this); //Equip the Item that is click on in the inventroy
     }
 
 }

@@ -74,7 +74,7 @@ public class PlayerMovement : MonoBehaviour
     private bool level5Achieved = false;
 
     //Input System
-    FbGInputSystem inputSystem;
+    FbGInputSystemV2 inputSystem;
 
     //Start Methods
 
@@ -91,7 +91,7 @@ public class PlayerMovement : MonoBehaviour
         equipmentManager = GameObject.FindObjectOfType(typeof(EquipmentManager)) as EquipmentManager;                   //This complete the reference to the EquipmentManager Script
         playerStats = GameObject.FindObjectOfType(typeof(PlayerStats)) as PlayerStats;                                  //This complete the reference to the PlayerStats.cs Script
         playerDirection = PlayerDirection.Down;                                                                         //Sets the player Direction to down when the game start
-        inputSystem = GetComponent<FbGInputSystem>();                                                                   //Complete a reference to the Arugula Input System Wrapper: http://angryarugula.com/unity/Arugula_InputSystem.unitypackage
+        inputSystem = GetComponent<FbGInputSystemV2>();                                                                   //Complete a reference to the Arugula Input System Wrapper: http://angryarugula.com/unity/Arugula_InputSystem.unitypackage
     }
 
     // Update is called once per frame
@@ -109,6 +109,8 @@ public class PlayerMovement : MonoBehaviour
             UpdateAnimationAndMove();
         }
 
+        //if(inputSystem.)
+
         //Part of the Arugula Input System. It checks to see if the Attack Button has been pressed. Refer to the FbGInputSystem file
         if (inputSystem.Attack.WasPressed)
         {
@@ -118,37 +120,37 @@ public class PlayerMovement : MonoBehaviour
                 playerMovementDisabled = true; //Prevents the player from moving the Attack Button has been pressed
             }
         }
-
+        
         if (inputSystem.Attack.Pressed && Time.time - startTime > 5f && level4Achieved == true && level5Achieved == false && (equipmentManager.currentEquipment.equipmentType == ToolType.hoe || equipmentManager.currentEquipment.equipmentType == ToolType.wateringCan) && equipmentManager.currentEquipment.toolLevel >= ToolLevel.level5)
         {
             level5Achieved = true;
             Debug.Log((Time.time - startTime).ToString("00:00.00") + " Level5");
         }
-
+        
         if (inputSystem.Attack.Pressed && Time.time - startTime > 4f && level3Achieved == true && level4Achieved == false && (equipmentManager.currentEquipment.equipmentType == ToolType.hoe || equipmentManager.currentEquipment.equipmentType == ToolType.wateringCan) && equipmentManager.currentEquipment.toolLevel >= ToolLevel.level4)
         {
             level4Achieved = true;
             Debug.Log((Time.time - startTime).ToString("00:00.00") + " Level4");
         }
-
+        
         if (inputSystem.Attack.Pressed && Time.time - startTime > 3f && level2Achieved == true && level3Achieved == false && (equipmentManager.currentEquipment.equipmentType == ToolType.hoe || equipmentManager.currentEquipment.equipmentType == ToolType.wateringCan) && equipmentManager.currentEquipment.toolLevel >= ToolLevel.level3)
         {
             level3Achieved = true;
             Debug.Log((Time.time - startTime).ToString("00:00.00") + " Level3");
         }
-
+        
         if (inputSystem.Attack.Pressed && Time.time - startTime > 2f && level1Achieved == true && level2Achieved == false && (equipmentManager.currentEquipment.equipmentType == ToolType.hoe || equipmentManager.currentEquipment.equipmentType == ToolType.wateringCan) && equipmentManager.currentEquipment.toolLevel >= ToolLevel.level2)
         {
             level2Achieved = true;
             Debug.Log((Time.time - startTime).ToString("00:00.00") + " Level2");
         }
-
+        
         if (inputSystem.Attack.Pressed && level1Achieved == false)
         {
             level1Achieved = true;
             Debug.Log((Time.time - startTime).ToString("00:00.00") + " Level1");
         }
-
+        
         if (inputSystem.Attack.WasReleased)
         {
             if (level5Achieved == true)
@@ -186,7 +188,7 @@ public class PlayerMovement : MonoBehaviour
                 StartCoroutine(attackCoroutine());
                 Debug.Log("Level1 Attack Achieved");
             }
-
+        
             level1Achieved = false;
             level2Achieved = false;
             level3Achieved = false;

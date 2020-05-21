@@ -26,13 +26,28 @@ public class InventoryScriptV2 : MonoBehaviour
     //Variables
     //This is for Debugging
     [SerializeField]
-    public int inventorySizeLimit = 36; //This is the max size of the inventory
+    public int inventorySizeLimit = 36; //This is the max size of the inventory. This is probably not needed since each slot looks after itselfs
     public List<Item> _items = new List<Item>(); //This create a a list against the inventory GameObject that will accept the scripable object "Item"
     public List<SlotScriptV2> _slots = new List<SlotScriptV2>(); //This is a list of all slots in the inventory. The slots are linked to this list via the unity inspector
+    private SlotScriptV2 _fromSlot; //This is used when moving an Item. When the player clicks on a slot, we can access the methods of the slot as needed. Is referenced in the property FromSlot
 
 
     //Properties
 
+    //The fromSlot will always be the item that is being carried by the hand. This function will grey out the Slot if the item is being moved
+    public SlotScriptV2 fromSlot
+    {
+        get { return _fromSlot; }
+        
+        set
+        {
+            _fromSlot = value;
+            if (value != null) //If an item has been clicked, the _fromSlot is considered in use
+            {
+                _fromSlot.MySlotIcon.color = Color.grey; //set the slot/icon colour to grey
+            }
+        }
+    }
 
     //Unity Methods
 
@@ -86,18 +101,18 @@ public class InventoryScriptV2 : MonoBehaviour
         return false; //If the above paths do not return a true, the we return false. In this case, after each slot is checked, if no slots return true, we return fasle as we could not add an Item
     }
 
-
+    //This method is called if the AddItemToInventory Method determines that an item can be stacked  on to an exisiting slot. Return's True if the item was added to a existing slot successfully
     private bool PlaceInStackSlot(Item item)
     {
-        foreach (SlotScriptV2 slot in _slots)
+        foreach (SlotScriptV2 slot in _slots) //Check each slot in the inventory
         {
-            if (slot.AddItemToStack(item))
+            if (slot.AddItemToStack(item)) //If AddItemToStack returns true, return from this method reporting TRUE
             {
-                return true;
+                return true; //Return True if the item was added to Stack
             }
         }
 
-        return false;
+        return false; //Return false if item was not added to stack
     }
 
 }
