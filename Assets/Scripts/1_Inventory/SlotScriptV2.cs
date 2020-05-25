@@ -1,21 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
 
-public class SlotScriptV2 : MonoBehaviour, IPointerClickHandler
+public class SlotScriptV2 : MonoBehaviour
 {
     //Future Anthony, If your method/Variable is using a get/set, it is a property. If you declare a public bool <Name> {} with no get or set, it is a method.
     //Local Variables to this script will be prefixed with an underscore. EG _item
     //Properties to this script will be prefixed as with "my" eg myItem
 
     //Variables
-    [SerializeField] private ObservableStack<Item> _items = new ObservableStack<Item>(); //ObservableStack is an event that keeps track of each stack on a slot
+    [SerializeField] private Stack<Item> _items = new Stack<Item>(); //Stack is an event that keeps track of each stack on a slot
     [SerializeField] private Image _icon; //This is the image that sits on the slot
     [SerializeField] private Text _stackSizeText; //This is mapped in the UI against the slot prefab
-    [SerializeField] InputSystemUIInputModule UI;
 
     //Properties
 
@@ -27,7 +27,7 @@ public class SlotScriptV2 : MonoBehaviour, IPointerClickHandler
     }
 
     //This getter property will allow other classes and methods to access the "items" on the Obserablestack _items via the variable known as slotItems
-    public ObservableStack<Item> slotItems
+    public Stack<Item> slotItems
     {
         get { return _items; }
 
@@ -37,6 +37,23 @@ public class SlotScriptV2 : MonoBehaviour, IPointerClickHandler
     public bool isEmpty
     {
         get { return slotItems.Count == 0; } //If the count is 0, this means the slot is empty becasue there are no items in the stack on the slot. this will return true
+    }
+
+
+    //This getter property will check if the slot is empity (using isEmpty Property) OR it will check if the slot item is less then the items max stack count. 
+    //It will return false if either of these crietreas are true. THis is important when trying to Merge 2 stacks of items together
+    public bool isFull
+    {
+        get
+        {
+            //If the slot is emply OR the count of the max stack size is less then the max count then this slot is free to have the item added to it
+            if (isEmpty || slotItemCount < MyItem.MyStackSize)
+            {
+                return false; //This means the slot is empty. Meaning the slot is not full allowing items to be stacks
+            }
+
+            return true;
+        }
     }
 
     //This getter property is called when we want to check (Peek) at the current item on the slot. We check the item on the slot and pass it to the property "MyItem" which we can then do extra logic
@@ -61,33 +78,9 @@ public class SlotScriptV2 : MonoBehaviour, IPointerClickHandler
 
 
     //Unity Methods
-    //Awake is used as we need to always be listening to the item stack to see if something changes (For now this is disabled until i get placeInEmptySlot working
-    //private void Awake()
-    //{
-    //
-    //    //The Below are events being called from the ObservableStack Class
-    //    slotItems.OnPop += new UpdateStackEvent(UpdateSlot); //Whenever Pop() is called, this the ObservableStack will be listening and will call UpdateSlot, which will UpdateStackSize
-    //    slotItems.OnPush += new UpdateStackEvent(UpdateSlot); //Whenever Push() is called, this the ObservableStack will be listening and will call UpdateSlot, which will UpdateStackSize
-    //    slotItems.OnClear += new UpdateStackEvent(UpdateSlot); //Whenever Clear() is called, this the ObservableStack will be listening and will call UpdateSlot, which will UpdateStackSize
-    //
-    //}
 
     //Methods
-    private void Start()
-    {
-        UI = GetComponent<InputSystemUIInputModule>();
-    }
-
-    private void Update()
-    {
-        //if(UI.rightClick)
-        //{
-        //    Debug.Log("Click on " + this.name);
-        //}
-    }
-
-    //Check that a slot is empty
-
+  
     //Add Item to Slot
     //This will return true when an item has been added to the slot
     public bool AddItemToSlot(Item item)
@@ -118,30 +111,94 @@ public class SlotScriptV2 : MonoBehaviour, IPointerClickHandler
         return false; //When returned false, means we can't stack the item
     }
 
-    //Use Items
-    public void UseItem(Item item)
+    //Use Items (Is called from the slot UI Button as a UnityEvent)
+    public void UseItem()
     {
-        item.UseItem();
+        if(isEmpty == false)
+        {
+            MyItem.UseItem();
+        }
+        
     }
 
-
-
-    //This is activated when when the user clicks on the slot. This is what triggers the process to start using an item
-    public void OnPointerClick(PointerEventData eventData)
+    //RemoveItem is called whenever an item needs to be removed from a slot. EG it has been used or trashed from the inventory. This is called from the item.cs script when the slotscripv2.UseItem Method is called
+    public void RemoveItem(Item item)
     {
-        if (eventData.button == PointerEventData.InputButton.Left)
+        if (!isEmpty) //If the slot is not empty. Remove the item from the inventory using Pop(); This is a function to remove items from the stack
         {
-            Debug.Log("Click on " + this.name);
+            slotItems.Pop();
+            updateStackCount();
+        }
+    }
+
+    //Clear Stack to Empty. Clear() is a function of a stack
+    public void ClearSlot()
+    {
+        if (slotItemCount > 0) //If there is a minimum of 1 item on the slot
+        {
+            slotItems.Clear(); //Clear the slot using the stack function Clear()
+            updateStackCount(); // Update the stack count to reflect the changes
+        }
+    }
+
+    //Move Item
+    public void MouseMoveItem()
+    {
+        //Check one, Make sure there is nothing in the hand (mouse). This is determined by the variable _fromSlot in the inventoryScript
+        //Check two is to make sure the slot being clicked on is not empty
+        if (InventoryScriptV2.instance.fromSlot == null && !isEmpty) //if we don't have something to move
+        {
+            MouseHandFunctionScript.instance.TakeMoveable(MyItem as IMoveable); //An item can only be moved if it is IMoveable
+            InventoryScriptV2.instance.fromSlot = this; //"this" is whatever was just clicked on
+        }
+    }
+
+    //This method will be used to put an item back into the inventory
+    public bool PutItemBackOnSlot()
+    {
+        if (InventoryScriptV2.instance.fromSlot == this) //This means i have clicked on the same slot that i am trying to move from
+        {
+            InventoryScriptV2.instance.fromSlot.MySlotIcon.color = Color.white; //this sets the colour of the slot back to normal
+            return true;
         }
 
-        //Remove Item from Slot
+        return false;
+    }
 
-        //Move Item From Slot
+    //This method is used when moving an item to another slot. If you move the item from a hand to a slot of the same item type, it will try to merge them together
+    public bool MergeItems(SlotScript fromHand) //fromHand is the item in the handfunction
+    {
+
+        if (isEmpty)
+        {
+            return false; //If false, there is no need to merge items
+        }
+
+        //The item in the hand matches the item on the slot
+        //AND there is enough room on the slot to merge
+        if (fromHand.MyItem.GetType() == MyItem.GetType() && !isFull)  
+        {
+            int freeSlots = MyItem.MyStackSize - slotItemCount; //this determines how many free slots do we have in the stack
+
+            //this for loop has to run for how many free slots in the stack are avalible
+            for (int i = 0; i < freeSlots; i++)
+            {
+                AddItemToSlot(fromHand.MyItems.Pop());
+            }
+
+            return true; //return true if successful
+        }
+
+        return false; //if unsuccessful
 
     }
 
 
-        public void updateStackCount()
+
+
+
+
+    public void updateStackCount()
     {
         if(slotItemCount >= 1)
         {
@@ -153,6 +210,36 @@ public class SlotScriptV2 : MonoBehaviour, IPointerClickHandler
         {
             _stackSizeText.color = new Color(0, 0, 0, 0); //This sets the text on the slot to have no colour and no alpha which makes it invisible. Items with a stacksize of 0 do not need a stacksize since there is no item on the slot
             MySlotIcon.color = new Color(0, 0, 0, 0); //This sets the text on the slot to have no colour and no alpha which makes it invisible. Items with a stacksize of 0 do not need a stacksize since there is no item on the slot
+        }
+    }
+}
+
+
+
+// This class is inside the TestClass so it could access its private fields
+// this custom editor will show up on any object with TestScript attached to it
+// you don't need (and can't) attach this class to a gameobject
+[CustomEditor(typeof(SlotScriptV2))]
+public class StackPreview : Editor
+{
+    public override void OnInspectorGUI()
+    {
+
+        // get the target script as TestScript and get the stack from it
+        var ts = (SlotScriptV2)target;
+        var stack = ts.slotItems;
+
+        // some styling for the header, this is optional
+        var bold = new GUIStyle();
+        bold.fontStyle = FontStyle.Bold;
+        GUILayout.Label("Items in my stack", bold);
+
+        // add a label for each item, you can add more properties
+        // you can even access components inside each item and display them
+        // for example if every item had a sprite we could easily show it 
+        foreach (var item in stack)
+        {
+            GUILayout.Label(item.name);
         }
     }
 }

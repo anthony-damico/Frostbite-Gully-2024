@@ -71,13 +71,22 @@ public abstract class Item : ScriptableObject, IMoveable
         }
     }
 
-
+    //Use a item. This is overriteen for every Item as each itme can act differently
     public virtual void UseItem()
     {
 
     }
 
     //Whenever an Item is used, this remove function will allow the item to remove itself from the inventory. Any Items that inherit from this script will have this functionality
+    public void RemoveItem()
+    {
+        if(MyInventorySlot != null) //If there is at least one item on the slot
+        {
+            MyInventorySlot.RemoveItem(this); //Remove this item from the slot/stack
+        }
+    }
+
+    //Whenever an Item is used, this remove function will allow the item to remove itself from the inventory. Any Items that inherit from this script will have this functionality (Depricated)
     public void Remove()
     {
         if(MySlot != null) //If an item exists on the slot

@@ -24,7 +24,7 @@ public class Corn : Item, IUseable
         Debug.Log("The Item " + name + " has been used");
 
         //Remove the item once used. This comes from the Parent Script "Item"
-        Remove();
+        RemoveItem();
     }
 
 }

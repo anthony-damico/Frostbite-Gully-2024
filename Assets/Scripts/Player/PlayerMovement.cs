@@ -74,7 +74,7 @@ public class PlayerMovement : MonoBehaviour
     private bool level5Achieved = false;
 
     //Input System
-    FbGInputSystemV2 inputSystem;
+    FbGInputControllerV1 inputSystem;
 
     //Start Methods
 
@@ -91,7 +91,7 @@ public class PlayerMovement : MonoBehaviour
         equipmentManager = GameObject.FindObjectOfType(typeof(EquipmentManager)) as EquipmentManager;                   //This complete the reference to the EquipmentManager Script
         playerStats = GameObject.FindObjectOfType(typeof(PlayerStats)) as PlayerStats;                                  //This complete the reference to the PlayerStats.cs Script
         playerDirection = PlayerDirection.Down;                                                                         //Sets the player Direction to down when the game start
-        inputSystem = GetComponent<FbGInputSystemV2>();                                                                   //Complete a reference to the Arugula Input System Wrapper: http://angryarugula.com/unity/Arugula_InputSystem.unitypackage
+        inputSystem = GetComponent<FbGInputControllerV1>();                                                                 //Complete a reference to the Arugula Input System Wrapper: http://angryarugula.com/unity/Arugula_InputSystem.unitypackage
     }
 
     // Update is called once per frame
@@ -109,7 +109,8 @@ public class PlayerMovement : MonoBehaviour
             UpdateAnimationAndMove();
         }
 
-        //if(inputSystem.)
+        change.x = inputSystem.Move.X;
+        change.y = inputSystem.Move.Y;
 
         //Part of the Arugula Input System. It checks to see if the Attack Button has been pressed. Refer to the FbGInputSystem file
         if (inputSystem.Attack.WasPressed)
@@ -196,15 +197,16 @@ public class PlayerMovement : MonoBehaviour
             level5Achieved = false;
             playerMovementDisabled = false; //Let the player move again
         }
+
     }
 
 
-    private void OnMove(InputValue value)
-    {
-        var direction = value.Get<Vector2>();
-
-        change = new Vector3(direction.x, direction.y, 0);
-    }  
+    //private void OnMove(InputValue value)
+    //{
+    //    var direction = value.Get<Vector2>();
+    //
+    //    change = new Vector3(direction.x, direction.y, 0);
+    //}  
 
     private void GenerateToolHitboxLevel1()
     {
