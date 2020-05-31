@@ -55,10 +55,8 @@ public class DebugManagerScript : MonoBehaviour
 
             DisplayCheat("Close Cheat Menu", () => _active = false);
             DisplayCheat("Skip Day", () => DebugSkipTime());
-            DisplayCheat("Add Items To Inventory", () => DebugAddItemsToInventory());
             DisplayCheat("Add Items To InventoryV2", () => DebugAddItemsToInventoryV2());
-            DisplayCheat("Add Corn To Inventory", () => DebugAddCornToInventory());
-            DisplayCheat("Add Corn To InventoryV2", () => DebugAddCornToInventoryV2());
+            DisplayCheat("Add Crops To InventoryV2", () => DebugAddCornToInventoryV2());
             DisplayCheat("Create 20 Slot Bag", () => DebugCreate20SlotBag());
 
             GUILayout.FlexibleSpace();
@@ -157,6 +155,8 @@ public class DebugManagerScript : MonoBehaviour
         //The below is used as a debug to add a bag item to the inventory
         Corn corn = (Corn)Instantiate(inventoryScriptV2._items[5]); //This initizes the Item in slot 0 in the item array
         inventoryScriptV2.AddItemToInventory(corn);
+        Tomato tomato = (Tomato)Instantiate(inventoryScriptV2._items[6]); //This initizes the Item in slot 0 in the item array
+        inventoryScriptV2.AddItemToInventory(tomato);
     }
 
     //Add a 20 Slot Bag
