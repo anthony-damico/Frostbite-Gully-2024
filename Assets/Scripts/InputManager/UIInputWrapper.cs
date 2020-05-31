@@ -18,6 +18,7 @@ public class UIInputWrapper : MonoBehaviour, IPointerClickHandler
     public UnityEvent middleClick;
     public UnityEvent rightClick;
     public UnityEvent submit;
+    public UnityEvent buttonEast;
     public UnityEvent cancel;
 
     private EventSystem eventSystem;
@@ -52,6 +53,10 @@ public class UIInputWrapper : MonoBehaviour, IPointerClickHandler
             if(inputSystem.Submit.WasPressed)
             {
                 submit.Invoke();
+            }
+            else if (inputSystem.ButtonEast.WasPressed)
+            {
+                buttonEast.Invoke();
             }
         }
        // if(playerInput.submit)

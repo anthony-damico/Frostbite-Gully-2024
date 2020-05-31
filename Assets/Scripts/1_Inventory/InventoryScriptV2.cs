@@ -29,7 +29,7 @@ public class InventoryScriptV2 : MonoBehaviour
     public int inventorySizeLimit = 36; //This is the max size of the inventory. This is probably not needed since each slot looks after itselfs
     public List<Item> _items = new List<Item>(); //This create a a list against the inventory GameObject that will accept the scripable object "Item"
     public List<SlotScriptV2> _slots = new List<SlotScriptV2>(); //This is a list of all slots in the inventory. The slots are linked to this list via the unity inspector
-    private SlotScriptV2 _fromSlot; //This is used when moving an Item. When the player clicks on a slot, we can access the methods of the slot as needed. Is referenced in the property FromSlot
+    public SlotScriptV2 _fromSlot; //This is used when moving an Item. When the player clicks on a slot, we can access the methods of the slot as needed. Is referenced in the property FromSlot
 
 
     //Properties
@@ -113,6 +113,22 @@ public class InventoryScriptV2 : MonoBehaviour
         }
 
         return false; //Return false if item was not added to stack
+    }
+
+
+    public void updateStackCount(SlotScriptV2 slot)
+    {
+        if (slot.slotItemCount >= 1)
+        {
+            slot.MySlotStackSizeText.text = slot.slotItemCount.ToString(); //Set the text UI Element on the Slot equal to the count if Item in the stack on the slot
+            slot.MySlotStackSizeText.color = Color.white; //If the colour of the text is hidden due to alpha being set to none  or not white, set it to white so it is now visiable
+            slot.MySlotIcon.color = Color.white; //If the colour of the Icon is hidden due to alpha being set to none or not white, set it to white so it is now visiable
+        }
+        else if (slot.slotItemCount <= 0)
+        {
+            slot.MySlotStackSizeText.color = new Color(0, 0, 0, 0); //This sets the text on the slot to have no colour and no alpha which makes it invisible. Items with a stacksize of 0 do not need a stacksize since there is no item on the slot
+            slot.MySlotIcon.color = new Color(0, 0, 0, 0); //This sets the image on the slot to have no colour and no alpha which makes it invisible. Items with a stacksize of 0 do not need a stacksize since there is no item on the slot
+        }
     }
 
 }

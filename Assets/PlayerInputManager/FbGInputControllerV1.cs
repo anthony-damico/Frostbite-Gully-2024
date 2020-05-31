@@ -10,4 +10,5 @@ public class FbGInputControllerV1 : InputActionsWrapper
     public Button Click = new Button("ba297aa9-d85d-48ef-8b2a-7312765b9099");
     public Button MiddleClick = new Button("cb52900e-fd85-4829-808d-e9f0034d9009");
     public Button RightClick = new Button("76e31b67-0b69-4140-8260-cc1c4ad7efa5");
+    public Button ButtonEast = new Button("3f94054f-c6ff-40a1-88ac-cc541b2771af");
 }

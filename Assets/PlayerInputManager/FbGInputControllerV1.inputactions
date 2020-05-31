@@ -108,6 +108,14 @@
                     "expectedControlType": "Quaternion",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "ButtonEast",
+                    "type": "Button",
+                    "id": "3f94054f-c6ff-40a1-88ac-cc541b2771af",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -768,6 +776,17 @@
                     "processors": "",
                     "groups": "XR",
                     "action": "TrackedDevicePosition",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a7d11cc1-787a-48d8-adcb-6b8b3d3def10",
+                    "path": "<Keyboard>/m",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "ButtonEast",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

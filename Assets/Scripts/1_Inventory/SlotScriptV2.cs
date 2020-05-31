@@ -26,6 +26,13 @@ public class SlotScriptV2 : MonoBehaviour
         set { _icon = value; }
     }
 
+    //This getter property will allow other classes and methods to change the icon on a slot
+    public Text MySlotStackSizeText
+    {
+        get { return _stackSizeText; }
+        set { _stackSizeText = value; }
+    }
+
     //This getter property will allow other classes and methods to access the "items" on the Obserablestack _items via the variable known as slotItems
     public Stack<Item> slotItems
     {
@@ -88,7 +95,7 @@ public class SlotScriptV2 : MonoBehaviour
         slotItems.Push(item); //This adds the item to the stack _items
         _icon.sprite = item.MyIcon; //This sets the icon on the slot equal to the icon from scriptable object Item
         _icon.color = Color.white; //set the icon UI image to white when an item has been added (This is to remove the alpha that hides the image allowing the image allocated in the previous line to display)
-        updateStackCount(); //Update the Text UI Element on the slot to represent the number of items on the slot
+        InventoryScriptV2.instance.updateStackCount(this); //Update the Text UI Element on the slot to represent the number of items on the slot
         item.MyInventorySlot = this; //This is how an item knows what slot it is on. 
         return true;
     }
@@ -104,7 +111,7 @@ public class SlotScriptV2 : MonoBehaviour
         {
             slotItems.Push(item);
             item.MyInventorySlot = this; //This tells the current slot what item is on it
-            updateStackCount(); //Update the Text UI Element on the slot to represent the number of items on the slot
+            InventoryScriptV2.instance.updateStackCount(this); //Update the Text UI Element on the slot to represent the number of items on the slot
             return true; //When returned true, means we can stack the item
         }
 
@@ -127,7 +134,7 @@ public class SlotScriptV2 : MonoBehaviour
         if (!isEmpty) //If the slot is not empty. Remove the item from the inventory using Pop(); This is a function to remove items from the stack
         {
             slotItems.Pop();
-            updateStackCount();
+            InventoryScriptV2.instance.updateStackCount(this);
         }
     }
 
@@ -137,7 +144,7 @@ public class SlotScriptV2 : MonoBehaviour
         if (slotItemCount > 0) //If there is a minimum of 1 item on the slot
         {
             slotItems.Clear(); //Clear the slot using the stack function Clear()
-            updateStackCount(); // Update the stack count to reflect the changes
+            InventoryScriptV2.instance.updateStackCount(this); // Update the stack count to reflect the changes
         }
     }
 
@@ -151,7 +158,53 @@ public class SlotScriptV2 : MonoBehaviour
             MouseHandFunctionScript.instance.TakeMoveable(MyItem as IMoveable); //An item can only be moved if it is IMoveable
             InventoryScriptV2.instance.fromSlot = this; //"this" is whatever was just clicked on
         }
+        else if (InventoryScriptV2.instance.fromSlot != null) //If we have something to move
+        {
+            //First you just want to try and put the item back (if you clicked on the same slot
+            //the second check is to try and merge
+            //The third check you want to do is to try and swap the items on the slots
+            //The fouth check is put the item on a slot
+            if (PutItemBackOnSlot() == true || MergeItems(InventoryScriptV2.instance.fromSlot) || SwapItems(InventoryScriptV2.instance.fromSlot) || AddItemsToNewSlot(InventoryScriptV2.instance.fromSlot.slotItems))
+            {
+                MouseHandFunctionScript.instance.DropMoveable();
+                InventoryScriptV2.instance.updateStackCount(this);
+                InventoryScriptV2.instance.updateStackCount(InventoryScriptV2.instance.fromSlot);
+                InventoryScriptV2.instance.fromSlot = null; //this resets the fromSlot to allow the user to pick up another item
+            }
+
+        }
+
     }
+
+
+    //Move Item
+    public void ControllerMoveItem()
+    {
+        //Check one, Make sure there is nothing in the hand (mouse). This is determined by the variable _fromSlot in the inventoryScript
+        //Check two is to make sure the slot being clicked on is not empty
+        if (InventoryScriptV2.instance.fromSlot == null && !isEmpty) //if we don't have something to move
+        {
+            ControllerHandFunctionScript.instance.TakeMoveable(MyItem as IMoveable); //An item can only be moved if it is IMoveable
+            InventoryScriptV2.instance.fromSlot = this; //"this" is whatever was just clicked on
+        }
+        else if (InventoryScriptV2.instance.fromSlot != null) //If we have something to move
+        {
+            //First you just want to try and put the item back (if you clicked on the same slot
+            //the second check is to try and merge
+            //The third check you want to do is to try and swap the items on the slots
+            //The fouth check is put the item on a slot
+            if (PutItemBackOnSlot() == true || MergeItems(InventoryScriptV2.instance.fromSlot) || SwapItems(InventoryScriptV2.instance.fromSlot) || AddItemsToNewSlot(InventoryScriptV2.instance.fromSlot.slotItems))
+            {
+                ControllerHandFunctionScript.instance.DropMoveable();
+                InventoryScriptV2.instance.updateStackCount(this);
+                InventoryScriptV2.instance.updateStackCount(InventoryScriptV2.instance.fromSlot);
+                InventoryScriptV2.instance.fromSlot = null; //this resets the fromSlot to allow the user to pick up another item
+            }
+
+        }
+
+    }
+
 
     //This method will be used to put an item back into the inventory
     public bool PutItemBackOnSlot()
@@ -166,12 +219,12 @@ public class SlotScriptV2 : MonoBehaviour
     }
 
     //This method is used when moving an item to another slot. If you move the item from a hand to a slot of the same item type, it will try to merge them together
-    public bool MergeItems(SlotScript fromHand) //fromHand is the item in the handfunction
+    public bool MergeItems(SlotScriptV2 fromHand) //fromHand is the item in the handfunction
     {
 
-        if (isEmpty)
+        if (isEmpty) //If isEmpty is True
         {
-            return false; //If false, there is no need to merge items
+            return false; //Return false, there is no need to merge items
         }
 
         //The item in the hand matches the item on the slot
@@ -183,34 +236,79 @@ public class SlotScriptV2 : MonoBehaviour
             //this for loop has to run for how many free slots in the stack are avalible
             for (int i = 0; i < freeSlots; i++)
             {
-                AddItemToSlot(fromHand.MyItems.Pop());
+                AddItemToSlot(fromHand.slotItems.Pop());
             }
 
-            return true; //return true if successful
+            return true; //return true if successful added merge the item with a stack
         }
 
-        return false; //if unsuccessful
-
+        return false; //if unsuccessful, return false. This will allow the next check to happen in the MouseMoveItem() method or ControllerMoveItem() method
     }
 
-
-
-
-
-
-    public void updateStackCount()
+    //This will be used for swapping items between slots
+    public bool SwapItems(SlotScriptV2 fromSlot)
     {
-        if(slotItemCount >= 1)
+        //If the slot we are clicking on is empty (true)
+        if (isEmpty == true)
         {
-            _stackSizeText.text = slotItemCount.ToString(); //Set the text UI Element on the Slot equal to the count if Item in the stack on the slot
-            _stackSizeText.color = Color.white; //If the colour of the text is hidden due to alpha being set to none  or not white, set it to white so it is now visiable
-            MySlotIcon.color = Color.white; //If the colour of the Icon is hidden due to alpha being set to none or not white, set it to white so it is now visiable
+            return false; //This means the slot is empty and we don't have to do anything else
         }
-        else if (slotItemCount <= 0)
+
+        //If the item moving is differnt to the item on the slot, we will swap the place of the 2 items
+        //OR if the count of item is MAX (eg 5 corns on the slot vs 2 corns in the hand) then swap the item as the slot has maxed stack
+        if (fromSlot.MyItem.GetType() != MyItem.GetType() || fromSlot.slotItemCount + slotItemCount > MyItem.MyStackSize)
         {
-            _stackSizeText.color = new Color(0, 0, 0, 0); //This sets the text on the slot to have no colour and no alpha which makes it invisible. Items with a stacksize of 0 do not need a stacksize since there is no item on the slot
-            MySlotIcon.color = new Color(0, 0, 0, 0); //This sets the text on the slot to have no colour and no alpha which makes it invisible. Items with a stacksize of 0 do not need a stacksize since there is no item on the slot
+
+            //Make a copy of all items we need to swap from Slot A/Selected slot into a temporary slot so we don't lose the data/items associated to the slot
+            Stack<Item> tmpFrom = new Stack<Item>(fromSlot.slotItems);
+
+            //Now that we have a refernce to the data from Slot A/Selected Slot, Clear all the data/items to make it empty
+            fromSlot.slotItems.Clear();
+
+            //Take all items from slot B and copy them into Slot A
+            fromSlot.AddItemsToNewSlot(slotItems);
+
+            //clear slot B
+            slotItems.Clear();
+
+            //Move items from temporaary stack and copy to slot B
+            AddItemsToNewSlot(tmpFrom);
+
+            //Return true becuase the swap was successful
+            return true;
         }
+
+        //return false if the swap was not possible
+        return false;
+    }
+
+    //This function works beside the SwapItems method amd can be used to move datas/items to a new empty slot
+    //This function will take an item and place it into a different slot in the inventory
+    //This function will also check if you can add an item to an existing stack
+    public bool AddItemsToNewSlot(Stack<Item> newItems)
+    {
+        //If the slot is emply OR the item being moved matches the item being moved to then complete the code within the {}
+        if (isEmpty == true || newItems.Peek().GetType() == MyItem.GetType())
+        {
+            int count = newItems.Count; //this is used for the loop below. This checks the count on all the newItems (The item from the stack that is passed through to it. EG the temporary stack)
+
+            for (int i = 0; i < count; i++)
+            {
+                //we are checking if the slot is full or not (To see if we can stack)
+                if (isFull == true)
+                {
+                    return false; //this means we can't proceed with adding the item to slot or slotstack
+                }
+
+                //else
+                AddItemToSlot(newItems.Pop());
+            }
+
+            return true; //if we managed to move the items, return true
+
+        }
+
+        return false; //If we are unable to move the items, return false
     }
 }
 
