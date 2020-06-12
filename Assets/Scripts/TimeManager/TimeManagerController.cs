@@ -35,6 +35,33 @@ public class TimeManagerController : MonoBehaviour
     public int years = 1; //This is the year number on the clock
     public int AMPM = 1; //This will define whether is is AM (0) or PM (1)
 
+
+    public Seasons MySeason
+    {
+        get
+        {
+            //If the slot is emply OR the count of the max stack size is less then the max count then this slot is free to have the item added to it
+            if (seasons == 1)
+            {
+                return Seasons.spring; //This means the slot is empty. Meaning the slot is not full allowing items to be stacks
+            }
+            else if(seasons == 2)
+            {
+                return Seasons.summer;
+            }
+            else if (seasons == 3)
+            {
+                return Seasons.autumn;
+            }
+            else if(seasons == 4)
+            {
+                return Seasons.winter;
+            }
+
+            return Seasons.spring;
+        } 
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -106,4 +133,14 @@ public class TimeManagerController : MonoBehaviour
         }
     }
 
+}
+
+
+
+public enum Seasons
+{
+    spring,
+    summer,
+    autumn,
+    winter
 }
