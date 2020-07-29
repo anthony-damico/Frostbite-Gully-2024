@@ -9,7 +9,7 @@ using UnityEngine.InputSystem;
 public class MenuBackground : MonoBehaviour
 {
     [SerializeField] public bool menuOpen = false;
-    public CanvasGroup menuCanvasGroup; //This is used to Hide and Show the UI element. The Canvas Group is located on the Bag Prefab This is a reference
+    public CanvasGroup menuCanvasGroup; //This is used to Hide and Show the UI element.
     private FbGInputControllerV1 inputSystem;
     private EventSystem eventSystem;
 
