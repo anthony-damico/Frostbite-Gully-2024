@@ -44,6 +44,7 @@ public class PlayerMovement : MonoBehaviour
     public CropManagerController cropManagerController; //This creates a refernce to the CropManagerController script
     public EquipmentManager equipmentManager;           //This creates a refernce to the equipmentManager script
     private PlayerStats playerStats;                    //This creates a areferce to the PlayerStats.cs script
+    public VectorValue playerGlobalPosition;            //This is the players global position that is used when changing scenes
 
     //Player Animation Variables
     public AnimationClip clipDown;                      //The Animation for a tool/items down position
@@ -74,7 +75,7 @@ public class PlayerMovement : MonoBehaviour
     private bool level5Achieved = false;
 
     //Input System
-    FbGInputControllerV1 inputSystem;
+    public FbGInputControllerV1 inputSystem;
 
     //Start Methods
 
@@ -91,7 +92,16 @@ public class PlayerMovement : MonoBehaviour
         equipmentManager = GameObject.FindObjectOfType(typeof(EquipmentManager)) as EquipmentManager;                   //This complete the reference to the EquipmentManager Script
         playerStats = GameObject.FindObjectOfType(typeof(PlayerStats)) as PlayerStats;                                  //This complete the reference to the PlayerStats.cs Script
         playerDirection = PlayerDirection.Down;                                                                         //Sets the player Direction to down when the game start
-        inputSystem = GetComponent<FbGInputControllerV1>();                                                                 //Complete a reference to the Arugula Input System Wrapper: http://angryarugula.com/unity/Arugula_InputSystem.unitypackage
+        inputSystem = GetComponent<FbGInputControllerV1>();                                                             //Complete a reference to the Arugula Input System Wrapper: http://angryarugula.com/unity/Arugula_InputSystem.unitypackage
+        
+        if (playerGlobalPosition.usePreviousValue == true)
+        {
+            transform.position = playerGlobalPosition.previousValue;                                                 //This sets the players position on a scene when the scene starts based on whatever is stroed in tehe playerGlobalPosition (VectorValue) scriptable object 
+        }
+        else
+        {
+            transform.position = playerGlobalPosition.initialValue;                                                     //This sets the players position on a scene when the scene starts based on whatever is stroed in tehe playerGlobalPosition (VectorValue) scriptable object 
+        }
     }
 
     // Update is called once per frame

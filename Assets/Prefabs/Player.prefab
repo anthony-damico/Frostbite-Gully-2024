@@ -392,6 +392,8 @@ MonoBehaviour:
   cropManagerController: {fileID: 2122981167107324842, guid: 8e27c448fc297bb47aba9ff0b651d727,
     type: 3}
   equipmentManager: {fileID: 0}
+  playerGlobalPosition: {fileID: 11400000, guid: 111ad12724de40e479bc59d65f44b61d,
+    type: 2}
   clipDown: {fileID: 0}
   clipLeft: {fileID: 0}
   clipRight: {fileID: 0}
@@ -400,6 +402,7 @@ MonoBehaviour:
   toolHighlight: {fileID: 2601328761386874153}
   toolHitboxPrefab: {fileID: 2568013789731809290, guid: be7b8567adc4dfa4dabc95ff859cb69d,
     type: 3}
+  inputSystem: {fileID: 0}
 --- !u!95 &2601328761346526855
 Animator:
   serializedVersion: 3
