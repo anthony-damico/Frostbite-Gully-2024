@@ -15,6 +15,7 @@ public class SceneTransition : MonoBehaviour
 
     public string sceneToLoad;
     public Vector2 playerPosition;
+    public Vector2 playerPositionOffset;
     public VectorValue playerGlobalPosition;
     
 
@@ -26,13 +27,14 @@ public class SceneTransition : MonoBehaviour
             if(transferType == TransferType.initalValue)
             {
                 Debug.Log("initalValue");
-                playerGlobalPosition.initialValue = playerPosition;
+                playerGlobalPosition.initialValue = playerPosition + playerPositionOffset;
                 playerGlobalPosition.previousValue = GameObject.Find("Player").transform.position; //If we are transferring to a new scene or location, capture the previous coordinantes
                 playerGlobalPosition.usePreviousValue = false;
             }
             else if (transferType == TransferType.previousValue)
             {
                 Debug.Log("previousValue");
+                playerGlobalPosition.previousValue = playerGlobalPosition.previousValue + playerPositionOffset;
                 playerPosition = playerGlobalPosition.previousValue;
                 playerGlobalPosition.usePreviousValue = true;
                 
