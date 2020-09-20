@@ -19,12 +19,11 @@ public class SceneTransition : MonoBehaviour
     public VectorValue playerGlobalPosition;
     
 
-
-    public void OnTriggerEnter2D(Collider2D collider)
+    public void SceneTransfer(Collider2D collider)
     {
-        if(collider.CompareTag("Player") && !collider.isTrigger)
+        if (collider.CompareTag("Player") && !collider.isTrigger)
         {
-            if(transferType == TransferType.initalValue)
+            if (transferType == TransferType.initalValue)
             {
                 Debug.Log("initalValue");
                 playerGlobalPosition.initialValue = playerPosition + playerPositionOffset;
@@ -37,11 +36,12 @@ public class SceneTransition : MonoBehaviour
                 playerGlobalPosition.previousValue = playerGlobalPosition.previousValue + playerPositionOffset;
                 playerPosition = playerGlobalPosition.previousValue;
                 playerGlobalPosition.usePreviousValue = true;
-                
+
             }
-                        
+
             SceneManager.LoadScene(sceneToLoad);
-            
+
         }
     }
+
 }

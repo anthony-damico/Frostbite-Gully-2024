@@ -3951,7 +3951,7 @@ PrefabInstance:
     - target: {fileID: 6225170522192227023, guid: 32f66d201623adf45aefaacdc3557190,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.94
+      value: -3.5
       objectReference: {fileID: 0}
     - target: {fileID: 6225170522192227023, guid: 32f66d201623adf45aefaacdc3557190,
         type: 3}
@@ -3997,21 +3997,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8166783378887695448, guid: 32f66d201623adf45aefaacdc3557190,
-        type: 3}
-      propertyPath: transferType
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8166783378887695448, guid: 32f66d201623adf45aefaacdc3557190,
-        type: 3}
-      propertyPath: sceneToLoad
-      value: SampleScene
-      objectReference: {fileID: 0}
-    - target: {fileID: 8166783378887695448, guid: 32f66d201623adf45aefaacdc3557190,
-        type: 3}
-      propertyPath: playerPositionOffset.y
-      value: -0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32f66d201623adf45aefaacdc3557190, type: 3}

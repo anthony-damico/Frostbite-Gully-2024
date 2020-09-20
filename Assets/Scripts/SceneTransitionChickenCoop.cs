@@ -10,7 +10,9 @@ public class SceneTransitionChickenCoop : SceneTransition
 
     public void OnTriggerEnter2D(Collider2D collider)
     {
+        animalValue.listOfAnimals.Clear();
         animalValue.listOfAnimals.AddRange(chickenCoop.chickensInCoop);
+        SceneTransfer(collider);
     }
 
 }
