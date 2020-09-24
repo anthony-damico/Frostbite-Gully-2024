@@ -10,7 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 6225170522192227023}
   - component: {fileID: 1364404973933099656}
+<<<<<<< Updated upstream
   - component: {fileID: 774014219842601246}
+=======
+  - component: {fileID: -5357223110969644248}
+>>>>>>> Stashed changes
   m_Layer: 0
   m_Name: SceneTransition
   m_TagString: Untagged
@@ -58,7 +62,11 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2.9948118, y: 0.26898593}
   m_EdgeRadius: 0
+<<<<<<< Updated upstream
 --- !u!114 &774014219842601246
+=======
+--- !u!114 &-5357223110969644248
+>>>>>>> Stashed changes
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -67,7 +75,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 2375473431284340184}
   m_Enabled: 1
   m_EditorHideFlags: 0
+<<<<<<< Updated upstream
   m_Script: {fileID: 11500000, guid: 77454a9a01dd6804e84db1a2999dd019, type: 3}
+=======
+  m_Script: {fileID: 11500000, guid: c1b0efe0cb3f04545b1936c9c1bb8834, type: 3}
+>>>>>>> Stashed changes
   m_Name: 
   m_EditorClassIdentifier: 
   transferType: 1
