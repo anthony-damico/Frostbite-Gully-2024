@@ -11,10 +11,7 @@ public class SceneTransitionChickenCoop : SceneTransition
     public void OnTriggerEnter2D(Collider2D collider)
     {
         animalValue.listOfAnimals.Clear();
-<<<<<<< Updated upstream
-=======
         animalValue.listOfAnimals.TrimExcess(); //Set the list back to size 0
->>>>>>> Stashed changes
         animalValue.listOfAnimals.AddRange(chickenCoop.chickensInCoop);
         SceneTransfer(collider);
     }

@@ -6,11 +6,7 @@ public class SceneTransitionStandard : SceneTransition
 {
 
     public void OnTriggerEnter2D(Collider2D collider)
-<<<<<<< Updated upstream
-      {
-=======
     {
->>>>>>> Stashed changes
         SceneTransfer(collider);
     }
 
