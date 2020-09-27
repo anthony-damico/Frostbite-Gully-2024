@@ -5,6 +5,4 @@ using UnityEngine;
 public class ChickenScript : AnimalScript
 {
 
-    //No fucntions yet
-
 }

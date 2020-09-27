@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 537986018030293314}
   - component: {fileID: 537986018030293313}
   - component: {fileID: 537986018030293312}
-  - component: {fileID: 537986018030293311}
+  - component: {fileID: 5731540730732374255}
   m_Layer: 9
   m_Name: ChickenCoop
   m_TagString: Untagged
@@ -157,7 +157,7 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Chicken Coop
---- !u!114 &537986018030293311
+--- !u!114 &5731540730732374255
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -166,18 +166,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 537986018030293317}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d9341020ae889341868976dd8d9a068, type: 3}
+  m_Script: {fileID: 11500000, guid: 49d36400fb0e9fe45a71c09741094962, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildingName: 
-  chickensInCoop:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  coopSize: 4
-  chickenGameObject: {fileID: 6604580302290397523, guid: fe916f1019b411a40aee7e9ed0345a26,
-    type: 3}
+  buildingUuid: 0001
+  buildingName: ChickenCoop1
+  buildingSize: 4
+  AnimalBuildingSerialization: {fileID: 11400000, guid: 85fce26c6c4c4214fb5b7d863ccb0386,
+    type: 2}
 --- !u!1 &537986018513069491
 GameObject:
   m_ObjectHideFlags: 0
@@ -339,5 +335,5 @@ MonoBehaviour:
   playerPositionOffset: {x: 0, y: 0}
   playerGlobalPosition: {fileID: 11400000, guid: 111ad12724de40e479bc59d65f44b61d,
     type: 2}
-  chickenCoop: {fileID: 537986018030293311}
+  animalBuilding: {fileID: 5731540730732374255}
   animalValue: {fileID: 11400000, guid: bc648b4e36989b449b7842ef0ec8ad04, type: 2}

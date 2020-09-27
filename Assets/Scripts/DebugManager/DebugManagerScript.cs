@@ -11,7 +11,7 @@ public class DebugManagerScript : MonoBehaviour
     TimeManagerController timeManagerController; //Creates a reference back to the TimeManagerControllerScript to get access to the different time, day and season variables
     InventoryScript inventoryScript; //Create a referene back to the Inventory Script so i can add items to the inventory easily.
     InventoryScriptV2 inventoryScriptV2; //Create a referene back to the Inventory Script so i can add items to the inventory easily.
-
+    [SerializeField] CreateAnimalScript createAnimalScript;
 
     public bool _active = false;
 
@@ -23,6 +23,7 @@ public class DebugManagerScript : MonoBehaviour
         timeManagerController = TimeManagerController.instance; //Completes the reference back to the TimeManagerController.cs script using the singleton
         inventoryScript = InventoryScript.instance; //Completes the reference back to the InventoryScript.cs script using the singleton
         inventoryScriptV2 = InventoryScriptV2.instance; //Completes the reference back to the InventoryScript.cs script using the singleton
+        createAnimalScript = GetComponent<CreateAnimalScript>();
     }
 
     private void Update()
@@ -58,6 +59,7 @@ public class DebugManagerScript : MonoBehaviour
             DisplayCheat("Add Items To InventoryV2", () => DebugAddItemsToInventoryV2());
             DisplayCheat("Add Crops To InventoryV2", () => DebugAddCornToInventoryV2());
             DisplayCheat("Create 20 Slot Bag", () => DebugCreate20SlotBag());
+            DisplayCheat("Create Chicken", () => createAnimalScript.CreateChicken(createAnimalScript.chickenPrefab, "0001", "Bob", 100, 200));
 
             GUILayout.FlexibleSpace();
             GUILayout.EndVertical();

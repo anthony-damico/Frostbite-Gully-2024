@@ -12,20 +12,46 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8813e7230a2328a429af05801e364db9, type: 3}
   m_Name: ChickenStatsSerialization
   m_EditorClassIdentifier: 
-  chickenList:
-  - animalUuid: 0
-    animalName: 
-    animalAge: 
-    animalHealth: 
-  - animalUuid: 0
-    animalName: 
-    animalAge: 
-    animalHealth: 
-  - animalUuid: 0
-    animalName: 
-    animalAge: 
-    animalHealth: 
-  - animalUuid: 0
-    animalName: 
-    animalAge: 
-    animalHealth: 
+  animalList:
+  - animalPrefab: {fileID: 6604580302290397523, guid: fe916f1019b411a40aee7e9ed0345a26,
+      type: 3}
+    builidngUuid: 0001
+    animalUuid: 0001
+    animalName: Tony
+    animalAge: 30
+    animalHealth: 35
+  - animalPrefab: {fileID: 6604580302290397523, guid: fe916f1019b411a40aee7e9ed0345a26,
+      type: 3}
+    builidngUuid: 0001
+    animalUuid: 0002
+    animalName: Ryan
+    animalAge: 30
+    animalHealth: 29
+  - animalPrefab: {fileID: 6604580302290397523, guid: fe916f1019b411a40aee7e9ed0345a26,
+      type: 3}
+    builidngUuid: 0002
+    animalUuid: 0003
+    animalName: Cody
+    animalAge: 27
+    animalHealth: 40
+  - animalPrefab: {fileID: 6604580302290397523, guid: fe916f1019b411a40aee7e9ed0345a26,
+      type: 3}
+    builidngUuid: 0001
+    animalUuid: 0004
+    animalName: Alex
+    animalAge: 30
+    animalHealth: 50
+  - animalPrefab: {fileID: 6604580302290397523, guid: fe916f1019b411a40aee7e9ed0345a26,
+      type: 3}
+    builidngUuid: 0001
+    animalUuid: d3d740e7-ad8b-42da-9b42-b47c6863dc3e
+    animalName: Bob
+    animalAge: 100
+    animalHealth: 200
+  - animalPrefab: {fileID: 6604580302290397523, guid: fe916f1019b411a40aee7e9ed0345a26,
+      type: 3}
+    builidngUuid: 0001
+    animalUuid: 2bf476c9-9618-4693-ad2a-ec7f6d74fc40
+    animalName: Bob
+    animalAge: 100
+    animalHealth: 200
