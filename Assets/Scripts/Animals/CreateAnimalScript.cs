@@ -21,5 +21,6 @@ public class CreateAnimalScript : MonoBehaviour
         chickenStats.animalHealth = animalHealthValue;
         chickenStatsSerialization.animalList.Add(chickenStats);
     }
-
+    
+    
 }
