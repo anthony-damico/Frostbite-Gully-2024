@@ -13,18 +13,15 @@ MonoBehaviour:
   m_Name: AnimalBuildingSerialization
   m_EditorClassIdentifier: 
   animalBuildingList:
-  - buildingPrefab: {fileID: 0}
-    buildingUuid: 
-    buildingName: 
-    buildingSize: 0
+  - buildingPrefab: {fileID: 5731540730732374255, guid: ce4bf65d7e2459143a18486930b74a72,
+      type: 3}
+    buildingUuid: 0001
+    buildingName: ChickenCoop1
+    buildingSize: 4
     buildingPosition: {x: 0, y: 0}
-  - buildingPrefab: {fileID: 0}
-    buildingUuid: 
-    buildingName: 
-    buildingSize: 0
-    buildingPosition: {x: 0, y: 0}
-  - buildingPrefab: {fileID: 0}
-    buildingUuid: 
-    buildingName: 
-    buildingSize: 0
+  - buildingPrefab: {fileID: 5731540730732374255, guid: ce4bf65d7e2459143a18486930b74a72,
+      type: 3}
+    buildingUuid: 0002
+    buildingName: ChickenCoop2
+    buildingSize: 4
     buildingPosition: {x: 0, y: 0}

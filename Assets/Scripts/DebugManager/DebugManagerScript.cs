@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-
+using UnityEngine.SceneManagement;
 
 public class DebugManagerScript : MonoBehaviour
 {
@@ -11,7 +11,9 @@ public class DebugManagerScript : MonoBehaviour
     TimeManagerController timeManagerController; //Creates a reference back to the TimeManagerControllerScript to get access to the different time, day and season variables
     InventoryScript inventoryScript; //Create a referene back to the Inventory Script so i can add items to the inventory easily.
     InventoryScriptV2 inventoryScriptV2; //Create a referene back to the Inventory Script so i can add items to the inventory easily.
-    [SerializeField] CreateAnimalScript createAnimalScript;
+
+    [SerializeField]
+    private VectorValue vectorValue;
 
     public bool _active = false;
 
@@ -23,7 +25,6 @@ public class DebugManagerScript : MonoBehaviour
         timeManagerController = TimeManagerController.instance; //Completes the reference back to the TimeManagerController.cs script using the singleton
         inventoryScript = InventoryScript.instance; //Completes the reference back to the InventoryScript.cs script using the singleton
         inventoryScriptV2 = InventoryScriptV2.instance; //Completes the reference back to the InventoryScript.cs script using the singleton
-        createAnimalScript = GetComponent<CreateAnimalScript>();
     }
 
     private void Update()
@@ -59,7 +60,7 @@ public class DebugManagerScript : MonoBehaviour
             DisplayCheat("Add Items To InventoryV2", () => DebugAddItemsToInventoryV2());
             DisplayCheat("Add Crops To InventoryV2", () => DebugAddCornToInventoryV2());
             DisplayCheat("Create 20 Slot Bag", () => DebugCreate20SlotBag());
-            DisplayCheat("Create Chicken", () => createAnimalScript.CreateChicken(createAnimalScript.chickenPrefab, "0001", "Bob", 100, 200));
+            DisplayCheat("Purchase Chicken", () => PurchaseChicken());
 
             GUILayout.FlexibleSpace();
             GUILayout.EndVertical();
@@ -168,6 +169,12 @@ public class DebugManagerScript : MonoBehaviour
         Bag bag = (Bag)Instantiate(inventoryScript._items[0]); //This initizes the Item in slot 0 in the item array
         bag.Initialize(20); //This calls the Initialie method which is used to allocate the bag slot size. Refer to Bag.cs for more details
         bag.Use(); //This uses the bag to equip all the slots from the bag
+    }
+
+    void PurchaseChicken()
+    {
+        vectorValue.previousScene = SceneManager.GetActiveScene().name;
+        SceneManager.LoadScene("PurchaseAnimal");
     }
 
 }

@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea3cea4c893a57843b2719d5ee7c8307, type: 3}
   m_Name: PlayerGlobalPosition
   m_EditorClassIdentifier: 
-  initialValue: {x: 0.5, y: 3.66}
-  previousValue: {x: 0.5, y: 3.66}
-  usePreviousValue: 1
+  initialValue: {x: 0.5, y: -2.5}
+  previousValue: {x: 5.246931, y: -1.3910367}
+  usePreviousValue: 0
+  buildingUuid: 0002
+  previousScene: SampleScene

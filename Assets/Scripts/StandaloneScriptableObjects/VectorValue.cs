@@ -9,4 +9,5 @@ public class VectorValue : ScriptableObject
     public Vector2 previousValue; //XY Value returning to on previous scene
     public bool usePreviousValue; //Filter to identify if using previous value
     public string buildingUuid; //The building ID being passed through to the new scene
+    public string previousScene; //The Scene that we transferred from
 }

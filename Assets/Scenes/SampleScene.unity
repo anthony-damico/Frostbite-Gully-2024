@@ -1998,7 +1998,6 @@ GameObject:
   m_Component:
   - component: {fileID: 314572621}
   - component: {fileID: 314572622}
-  - component: {fileID: 314572623}
   m_Layer: 0
   m_Name: DebugManager
   m_TagString: Untagged
@@ -2032,26 +2031,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9de4f5267dcc2ba4985d8f9bf70df002, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  createAnimalScript: {fileID: 0}
+  vectorValue: {fileID: 11400000, guid: 111ad12724de40e479bc59d65f44b61d, type: 2}
   _active: 0
   xpos: 785
   ypos: 0
---- !u!114 &314572623
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 314572620}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eead0cde0d24b4e4088632a7018a0b29, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  chickenPrefab: {fileID: 6604580302290397523, guid: fe916f1019b411a40aee7e9ed0345a26,
-    type: 3}
-  chickenStatsSerialization: {fileID: 11400000, guid: 3e27725b737f1fd48b27d9bd0be74861,
-    type: 2}
 --- !u!114 &330480780 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 581007864, guid: 20a6b427cf0b8004abb2fd038b6e1538,

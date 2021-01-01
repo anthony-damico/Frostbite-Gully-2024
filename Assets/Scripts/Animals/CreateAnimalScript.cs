@@ -22,5 +22,9 @@ public class CreateAnimalScript : MonoBehaviour
         chickenStatsSerialization.animalList.Add(chickenStats);
     }
     
-    
+    public void CreateChickenV2(AnimalStats animalStats)
+    {
+
+    }
+
 }

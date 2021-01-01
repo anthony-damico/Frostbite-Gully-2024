@@ -5,6 +5,6 @@ using UnityEngine;
 public class AnimalBuildingScript : BuildingScript
 {
 
-    public AnimalBuildingSerialization AnimalBuildingSerialization; //Reference to the SO
+    public AnimalBuildingSerialization animalBuildingSerialization; //Reference to the SO
 
 }
