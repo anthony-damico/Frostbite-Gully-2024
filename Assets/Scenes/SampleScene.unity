@@ -17669,7 +17669,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f68c6c01eda939846b26dc3f980dddea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minuteIntervals: 1
+  minuteIntervals: 2
   tenMinutes: 1
   minutes: 1
   hours: 11
@@ -17678,6 +17678,8 @@ MonoBehaviour:
   seasons: 1
   years: 1
   AMPM: 0
+  timeManagerScriptableObject: {fileID: 11400000, guid: 0fa10fe49b50a11458e1dd3265ee7ae4,
+    type: 2}
 --- !u!1 &1235593787
 GameObject:
   m_ObjectHideFlags: 0

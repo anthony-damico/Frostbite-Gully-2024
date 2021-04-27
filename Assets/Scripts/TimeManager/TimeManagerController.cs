@@ -23,8 +23,6 @@ public class TimeManagerController : MonoBehaviour
 
     #endregion
 
-
-
     public float minuteIntervals = 2f; //This is how long to wait before adding Minutes
     public int tenMinutes = 1; //This is the first number in a minute such as 00, 10, 20, 30, 40, 50
     public int minutes = 1; //This is the second number in a minute such as 00, 01, 02, 03, 04, 05, 06, 07, 08, 09
@@ -34,7 +32,7 @@ public class TimeManagerController : MonoBehaviour
     public int seasons = 4; //This is the season number on the clock. There are 4 seasons in a year
     public int years = 1; //This is the year number on the clock
     public int AMPM = 1; //This will define whether is is AM (0) or PM (1)
-
+    public TimeManagerSerialization timeManagerScriptableObject;
 
     public Seasons MySeason
     {
@@ -66,12 +64,13 @@ public class TimeManagerController : MonoBehaviour
     void Start()
     {
         StartCoroutine(checkMinutes(minuteIntervals));
+        LoadTime();
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        SaveTime();
     }
 
     private IEnumerator checkMinutes(float minuteIntervals)
@@ -131,6 +130,30 @@ public class TimeManagerController : MonoBehaviour
         {
             AMPM = 0; //This means AM
         }
+    }
+
+    public void SaveTime()
+    {
+        timeManagerScriptableObject.tenMinutes = tenMinutes;
+        timeManagerScriptableObject.minutes = minutes;
+        timeManagerScriptableObject.hours = hours;
+        timeManagerScriptableObject.days = days;
+        timeManagerScriptableObject.date = date;
+        timeManagerScriptableObject.seasons = seasons;
+        timeManagerScriptableObject.years = years;
+        timeManagerScriptableObject.AMPM = AMPM;
+    }
+
+    public void LoadTime()
+    {
+        tenMinutes = timeManagerScriptableObject.tenMinutes;
+        minutes = timeManagerScriptableObject.minutes;
+        hours = timeManagerScriptableObject.hours;
+        days = timeManagerScriptableObject.days;
+        date = timeManagerScriptableObject.date;
+        seasons = timeManagerScriptableObject.seasons;
+        years = timeManagerScriptableObject.years;
+        AMPM = timeManagerScriptableObject.AMPM;
     }
 
 }
